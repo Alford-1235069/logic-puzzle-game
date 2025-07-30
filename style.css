@@ -1,0 +1,15 @@
+/* 画面の幅に合わせて縮むコンテナ */
+.container {
+  width: 100%;
+  max-width: 600px; /* PCでは600pxを上限に */
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ボタンなどの調整（スマホ画面で幅が600px未満の場合） */
+@media (max-width: 600px) {
+  .button {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
