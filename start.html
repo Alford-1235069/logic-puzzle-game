@@ -13,23 +13,35 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column; /*要素の並びの方向を縦方向にする*/
             height: 100vh;
             font-family:sans-serif; /*https://fonts.google.com*/
             cursor: pointer;
+            position: relative;
         }
-        .logo{
-            font-size: 2.5em;
+        .logo-img{
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .title{
+            font-size: 1.0em;
             text-align: center;
+            margin-bottom: 50px;
+        }
+        .instruction {
+            position: absolute;
+            bottom: 30px;
+            font-size: 1.2em;
+            opacity: 0.7;
         }
     </style>
 </head>
-<body>
-    <div class="title">title</div>
-    <script>
-        /*クリック時に画面遷移*/
-        document.body.addEventListener("click",function(){
-            window.location.href="stage-select.html";
-        });
-    </script>
+<body onclick="location.href='stage-select.html'">
+
+  <img src="pictures/logo.png" class="logo-img" />
+
+  <div class="title">Logic Puzzle Game</div>
+
+  <div class="instruction">画面をタップしてスタート</div>
 </body>
 </html>
