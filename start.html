@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Puzzle Game</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /*要素の並びの方向を縦方向にする*/
+            height: 100vh;
+            font-family:sans-serif; /*https://fonts.google.com*/
+            cursor: pointer;
+            position: relative;
+        }
+        .logo-img{
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .title{
+            font-size: 1.0em;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #222;
+        }
+        .instruction {
+            position: absolute;
+            bottom: 30px;
+            font-size: 1.2em;
+            opacity: 0.7;
+            color: #222;
+        }
+    </style>
+</head>
+<body onclick="location.href='stage-select.html'">
+
+  <img src="pictures/logo.png" class="logo-img" />
+
+  <div class="title">Logic Puzzle Game</div>
+
+  <div class="instruction">画面をタップしてスタート</div>
+</body>
+</html>
