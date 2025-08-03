@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tap and release</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+      color: black;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .label {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .stage {
+      margin: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+  <h1 class="title">ステージを選んでください</h1>
+
+    <div class="stage-block">
+        <div class="label">チュートリアル</div>
+        <div class="stage-row">
+        <button class="stage">1</button>
+        <button class="stage">2</button>
+        <button class="stage">3</button>
+        <button class="stage">4</button>
+        </div>
+    </div>
+
+    <div class="stage-block">
+        <div class="label">★☆☆☆</div>
+        <div class="stage-row">
+        <button class="stage">5</button>
+        <button class="stage">6</button>
+        <button class="stage">7</button>
+        <button class="stage">8</button>
+        </div>
+    </div>
+
+    <div class="stage-block">
+        <div class="label">★★☆☆</div>
+        <div class="stage-row">
+        <button class="stage">9</button>
+        <button class="stage">10</button>
+        <button class="stage">11</button>
+        <button class="stage">12</button>
+        </div>
+    </div>
+
+    <div class="stage-block">
+        <div class="label">★★★☆</div>
+        <div class="stage-row">
+        <button class="stage">13</button>
+        <button class="stage">14</button>
+        <button class="stage">15</button>
+        <button class="stage">16</button>
+        </div>
+    </div>
+
+    <div class="stage-block">
+        <div class="label">★★★★</div>
+        <div class="stage-row">
+        <button class="stage">17</button>
+        <button class="stage">18</button>
+        <button class="stage">19</button>
+        <button class="stage">20</button>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
