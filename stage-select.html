@@ -20,29 +20,38 @@
     #stage-container {
       position: relative;
       width: 100%;
-      height: 100vh;
+      min-height: 100vh;
       overflow-y: auto;
-      padding: 20px 0;
+      padding: 5px 0;
+      /* 上下の余白を少なく */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 100px;
     }
 
     .stage-btn {
       width: 40vw;
       max-width: 250px;
       aspect-ratio: 1/2;
-      position: absolute;
       cursor: pointer;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
       transition: transform .2s;
+      height: 90px;
+      /* ボタンの高さを少し減らして縦間隔を狭く */
+      margin-bottom: 0;
+      /* マージンなし */
     }
 
     .stage-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
 
     .stage-btn.locked {
-      opacity: .8;
+      opacity: 0.6;
       pointer-events: none;
     }
 
@@ -66,7 +75,7 @@
       text-align: center;
     }
 
-    .inline-crown {
+    .inline-icon {
       width: clamp(12px, 3vw, 20px);
       margin: 0 4px;
       vertical-align: middle;
@@ -76,66 +85,73 @@
 
 <body>
   <div id="stage-container"></div>
+
   <script>
-    const totalStages = 21;
+    const totalStages = 21; // チュートリアル1つ + ステージ20
     const container = document.getElementById("stage-container");
 
-    // 初期ステータス（チュートリアルだけ解放）
+    // ステージの解放状態（チュートリアルだけ最初から解放）
     let stageStatus = [true, ...Array(totalStages - 1).fill(false)];
     let stageClear = Array(totalStages).fill(false);
-
-    const startY = 5; // チュートリアルボタンの上端
-    const offsetY = 25; // 2つ目以降のボタン間隔
 
     for (let i = 0; i < totalStages; i++) {
       const btn = document.createElement("div");
       btn.className = "stage-btn";
       if (!stageStatus[i]) btn.classList.add("locked");
 
-      // 左右中央に揃える
-      btn.style.left = "50%";
-      btn.style.transform = "translateX(-50%)";
-
-      // チュートリアルは startY、2つ目以降は startY + offsetY * i
-      btn.style.top = i === 0 ? startY + "%" : startY + offsetY * i + "%";
-
       const img = document.createElement("img");
-      img.src = "pictures/stage-btn.png";
+      img.src = stageStatus[i] ? "pictures/stage-btn.png" : "pictures/stage-btn-lock.png";
       img.className = "button-img";
       btn.appendChild(img);
 
-      // ラベル（左右に王冠orロック画像）
+      // ラベル部分
       const label = document.createElement("span");
       label.className = "label";
 
-      const leftImg = document.createElement("img");
-      leftImg.className = "inline-crown";
-      leftImg.src = !stageStatus[i] ? "pictures/lock.png" : (stageClear[i] ? "pictures/crown.png" : "pictures/lock.png");
-      label.appendChild(leftImg);
+      const leftIcon = document.createElement("img");
+      leftIcon.className = "inline-icon";
+      leftIcon.src = !stageStatus[i]
+        ? "pictures/lock.png"
+        : (stageClear[i] ? "pictures/crown.png" : "pictures/lock.png");
+      label.appendChild(leftIcon);
 
-      label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : "ステージ" + i));
+      label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : `ステージ${i}`));
 
-      const rightImg = document.createElement("img");
-      rightImg.className = "inline-crown";
-      rightImg.src = !stageStatus[i] ? "pictures/lock.png" : (stageClear[i] ? "pictures/crown.png" : "pictures/lock.png");
-      label.appendChild(rightImg);
+      const rightIcon = document.createElement("img");
+      rightIcon.className = "inline-icon";
+      rightIcon.src = !stageStatus[i]
+        ? "pictures/lock.png"
+        : (stageClear[i] ? "pictures/crown.png" : "pictures/lock.png");
+      label.appendChild(rightIcon);
 
       btn.appendChild(label);
 
-      // クリック処理
+      // クリックイベント
       btn.addEventListener("click", () => {
-        if (btn.classList.contains("locked")) return;
+        // 既にクリア済みまたはロック中なら無効
+        if (btn.classList.contains("locked") || stageClear[i]) return;
 
-        alert("ステージ " + (i === 0 ? "チュートリアル" : i) + " 開始！");
+        if (i === 0) {
+          alert("チュートリアル開始！");
+        } else {
+          alert(`ステージ${i}開始！`);
+        }
 
+        // クリア状態更新
         stageClear[i] = true;
-        if (i + 1 < totalStages) stageStatus[i + 1] = true;
+
+        // ボタンをロック
+        btn.classList.add("locked");
+        const btnImg = btn.querySelector("img.button-img");
+        btnImg.src = "pictures/stage-btn-lock.png";
 
         // 次のステージ解放
         if (i + 1 < totalStages) {
+          stageStatus[i + 1] = true;
           const nextBtn = container.children[i + 1];
           nextBtn.classList.remove("locked");
-          nextBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+          const nextImg = nextBtn.querySelector("img.button-img");
+          nextImg.src = "pictures/stage-btn.png";
         }
       });
 
