@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage Button Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #22325c;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        .stage-btn {
+            width: 300px;
+            height: 60px;
+            margin: 20px 0;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* 開放済みステージのみホバーで拡大 */
+        .stage-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* ロックされているステージはホバー拡大無効 */
+        .stage-btn.locked:hover {
+            transform: none;
+        }
+
+        .stage-btn img.button-img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transition: opacity 0.2s;
+        }
+
+        /* ロックされているステージはボタン画像だけ半透明 */
+        .stage-btn.locked>img.button-img {
+            opacity: 0.4 !important;
+        }
+
+        .stage-btn span.label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #22325c;
+            font-weight: bold;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="stage-btn locked">
+        <img src="pictures/stage-btn.png" class="button-img">
+        <span class="label">ステージ1（ロック）</span>
+    </div>
+
+    <div class="stage-btn">
+        <img src="pictures/stage-btn.png" class="button-img">
+        <span class="label">ステージ2（開放）</span>
+    </div>
+
+    <div class="stage-btn">
+        <img s
