@@ -84,19 +84,20 @@
     let stageStatus = [true, ...Array(totalStages - 1).fill(false)];
     let stageClear = Array(totalStages).fill(false);
 
-    const startY = 20;
-    const offsetY = 18;
-    const centerX = 50; // 中央基準
-    const offsetX = 20; // 左右にずらす量
+    const startY = 5; // チュートリアルボタンの上端
+    const offsetY = 25; // 2つ目以降のボタン間隔
 
     for (let i = 0; i < totalStages; i++) {
       const btn = document.createElement("div");
       btn.className = "stage-btn";
       if (!stageStatus[i]) btn.classList.add("locked");
 
-      // 左右交互にオフセット
-      btn.style.left = centerX + (i % 2 ? offsetX : -offsetX) + "%";
-      btn.style.top = startY + i * offsetY + "%";
+      // 左右中央に揃える
+      btn.style.left = "50%";
+      btn.style.transform = "translateX(-50%)";
+
+      // チュートリアルは startY、2つ目以降は startY + offsetY * i
+      btn.style.top = i === 0 ? startY + "%" : startY + offsetY * i + "%";
 
       const img = document.createElement("img");
       img.src = "pictures/stage-btn.png";
