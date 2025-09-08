@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap and release - Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #22325c;
+            color: #fff;
+            font-family: 'DotGothic16', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #board-wrapper {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        #board {
+            display: grid;
+            gap: 2px;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            color: #22325c;
+            font-weight: bold;
+        }
+
+        .goal-cell {
+            background: #888;
+            color: #fff;
+        }
+
+        .row-selector,
+        .col-selector {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            color: #22325c;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #cards button {
+            margin: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        #clear-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>カードを選んで行または列をクリック</h2>
+
+    <div id="board-wrapper">
+        <div id="board"></div>
+    </div>
+
+    <div id="cards">
+        <button class="card" data-type="NOT">NOT</button>
+        <button class="card" data-type="OR">OR</button>
+        <button class="card" data-type="AND">AND</button>
+        <button class="card" data-type="XOR">XOR</button>
+    </div>
+
+    <button id="clear-btn">ステージ選択に戻る</button>
+
+    <script>
+        const size = 8; // 8x8盤面
+        let boardArray = Array.from({ length: size }, () => Array(size).fill(0));
+        let goalArray = [
+            [0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 1, 0, 0, 1, 0, 0],
+            [0, 1, 0, 0, 0, 0, 1, 0],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1],
+            [0, 1, 1, 1, 1, 1, 1, 0]
+        ];
+
+        const board = document.getElementById("board");
+        const clearBtn = document.getElementById("clear-btn");
+        const cardButtons = document.querySelectorAll(".card");
+        let selectedCard = null;
+
+        // カード選択
+        cardButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (btn.disabled) return;
+                selectedCard = btn.dataset.type;
+                console.log("選択カード:", selectedCard);
+            });
+        });
+
+        function drawBoard() {
+            board.innerHTML = "";
+            board.style.gridTemplateColumns = `repeat(${size + 1},40px)`;
+
+            // 左上空白
+            const empty = document.createElement("div");
+            board.appendChild(empty);
+
+            // 列番号ボタン
+            for (let x = 0; x < size; x++) {
+                const colBtn = document.createElement("button");
+                colBtn.textContent = x + 1;
+                colBtn.className = "col-selector";
+                colBtn.addEventListener("click", () => applyCardToCol(x));
+                board.appendChild(colBtn);
+            }
+
+            for (let y = 0; y < size; y++) {
+                // 行番号ボタン
+                const rowBtn = document.createElement("button");
+                rowBtn.textContent = y + 1;
+                rowBtn.className = "row-selector";
+                rowBtn.addEventListener("click", () => applyCardToRow(y));
+                board.appendChild(rowBtn);
+
+                for (let x = 0; x < size; x++) {
+                    const cellDiv = document.createElement("div");
+                    cellDiv.className = "cell";
+                    if (goalArray[y][x] === 1) cellDiv.classList.add("goal-cell");
+                    cellDiv.textContent = boardArray[y][x];
+                    board.appendChild(cellDiv);
+                }
+            }
+        }
+
+        function applyCardToRow(y) {
+            if (!selectedCard) return;
+            for (let x = 0; x < size; x++) {
+                boardArray[y][x] = calc(boardArray[y][x], x, y);
+            }
+            disableCard(selectedCard);
+            selectedCard = null;
+            drawBoard();
+            checkClear();
+        }
+
+        function applyCardToCol(x) {
+            if (!selectedCard) return;
+            for (let y = 0; y < size; y++) {
+                boardArray[y][x] = calc(boardArray[y][x], x, y);
+            }
+            disableCard(selectedCard);
+            selectedCard = null;
+            drawBoard();
+            checkClear();
+        }
+
+        function calc(value, x, y) {
+            const card = selectedCard;
+            const seq = goalArray[y][x];
+            switch (card) {
+                case "NOT": return value === 0 ? 1 : 0;
+                case "OR": return value | seq;
+                case "AND": return value & seq;
+                case "XOR": return value ^ seq;
+            }
+        }
+
+        function disableCard(cardType) {
+            cardButtons.forEach(btn => {
+                if (btn.dataset.type === cardType) btn.disabled = true;
+            });
+        }
+
+        function checkClear() {
+            let clear = true;
+            for (let y = 0; y < size; y++) {
+                for (let x = 0; x < size; x++) {
+                    if (boardArray[y][x] !== goalArray[y][x]) clear = false;
+                }
+            }
+            if (clear) {
+                alert("ステージクリア！");
+                clearBtn.style.display = "block";
+            }
+        }
+
+        clearBtn.addEventListener("click", () => {
+            location.href = "stage_select.html";
+        });
+
+        drawBoard();
+    </script>
+</body>
+
+</html>

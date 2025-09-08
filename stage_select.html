@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage Select</title>
+  <style>
+    @font-face {
+      font-family: 'DotGothic16';
+      src: url('fonts/DotGothic16-Regular.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      font-family: 'DotGothic16', sans-serif;
+      background: #22325c;
+    }
+
+    #stage-container {
+      width: 100%;
+      min-height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px;
+      padding: 50px 0;
+    }
+
+    .stage-btn {
+      width: 40vw;
+      max-width: 250px;
+      height: 120px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform .2s;
+    }
+
+    .stage-btn img.button-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .stage-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .stage-btn.locked {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #22325c;
+      font-weight: bold;
+      font-size: clamp(12px, 2vw, 18px);
+      pointer-events: none;
+      text-align: center;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .inline-icon {
+      width: clamp(12px, 3vw, 20px);
+      height: auto;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="stage-container"></div>
+
+  <script>
+    const totalStages = 15; // チュートリアル1つ + ステージ14
+    const container = document.getElementById("stage-container");
+
+    let stageStatus = [true, ...Array(totalStages - 1).fill(false)]; // チュートリアルのみ解放
+    let stageClear = Array(totalStages).fill(false);
+
+    for (let i = 0; i < totalStages; i++) {
+      const btn = document.createElement("div");
+      btn.className = "stage-btn";
+      if (!stageStatus[i]) btn.classList.add("locked");
+
+      const img = document.createElement("img");
+      img.src = "pictures/stageBtn.png";
+      img.className = "button-img";
+      btn.appendChild(img);
+
+      const label = document.createElement("span");
+      label.className = "label";
+
+      // ロック中は lock アイコン
+      if (!stageStatus[i]) {
+        const leftIcon = document.createElement("img");
+        leftIcon.className = "inline-icon";
+        leftIcon.src = "pictures/lock.png";
+        label.appendChild(leftIcon);
+      }
+
+      // ステージ名
+      label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : `ステージ${i}`));
+
+      if (!stageStatus[i]) {
+        const rightIcon = document.createElement("img");
+        rightIcon.className = "inline-icon";
+        rightIcon.src = "pictures/lock.png";
+        label.appendChild(rightIcon);
+      }
+
+      btn.appendChild(label);
+
+      // クリックイベント
+      btn.addEventListener("click", () => {
+        if (btn.classList.contains("locked")) return;
+
+        // 🔽 ここで game.html に遷移
+        const stageId = i; // id=0はチュートリアル
+        location.href = `game.html?id=${stageId}`;
+      });
+
+      container.appendChild(btn);
+    }
+  </script>
+</body>
+
+</html>
