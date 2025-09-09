@@ -41,8 +41,8 @@
         }
 
         .button {
-            width: clamp(50px, 12vw, 80px);
-            height: clamp(50px, 12vw, 80px);
+            width: 80px;
+            height: 80px;
             background-color: #ccc;
             display: flex;
             justify-content: center;
@@ -50,7 +50,7 @@
             cursor: pointer;
             user-select: none;
             font-weight: bold;
-            font-size: clamp(16px, 3vw, 22px);
+            font-size: 24px;
             margin-left: 10px;
             border-radius: 8px;
         }
@@ -58,7 +58,6 @@
         #board-container {
             display: grid;
             margin: 20px 0 60px 0;
-            /* 下に余白を増やしてカードとの間隔を広げる */
             grid-gap: 1px;
             justify-content: center;
         }
@@ -71,7 +70,7 @@
             font-weight: bold;
             border: 1px solid black;
             user-select: none;
-            font-size: clamp(18px, 2.5vw, 22px);
+            font-size: 24px;
         }
 
         .cell-number {
@@ -80,14 +79,13 @@
 
         #cards-container {
             display: flex;
-            gap: 14px;
+            gap: 20px;
             overflow-x: auto;
             padding: 0 10px;
             max-width: 100%;
             justify-content: flex-start;
             box-sizing: border-box;
             margin-bottom: 60px;
-            /* 下に余白を追加 */
         }
 
         #cards-container::-webkit-scrollbar {
@@ -100,7 +98,7 @@
         }
 
         .card {
-            flex: 1 1 0;
+            width: 240px;
             aspect-ratio: 766/575;
             border-radius: 12px;
             overflow: hidden;
@@ -123,13 +121,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-weight: bold;
-            font-size: clamp(14px, 2vw, 20px);
+            font-size: 24px;
             color: black;
             text-shadow: 1px 1px 2px white;
             text-align: center;
             pointer-events: none;
             white-space: pre-line;
-            /* OR/ANDの配列を改行して表示 */
         }
 
         .card.selected {
@@ -155,32 +152,6 @@
             margin: 10px;
             padding: 5px 15px;
             cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            #back-button {
-                width: 80px;
-                height: 80px;
-                font-size: 24px;
-            }
-
-            #cards-container {
-                gap: 20px;
-                margin-bottom: 60px;
-            }
-
-            .card {
-                width: 240px;
-            }
-
-            .card-label {
-                font-size: 24px;
-            }
-
-            .cell,
-            .cell-number {
-                font-size: 24px;
-            }
         }
     </style>
 </head>
@@ -280,7 +251,7 @@
                 const label = document.createElement('span');
                 label.className = 'card-label';
                 label.textContent = (card.type !== 'NOT' && card.sequence)
-                    ? `${card.type}\n${card.sequence.join('')}` // 2段表示
+                    ? `${card.type}\n${card.sequence.join('')}`
                     : card.type;
                 div.appendChild(label);
 
