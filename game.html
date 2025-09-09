@@ -70,7 +70,7 @@
             font-weight: bold;
             border: 1px solid black;
             user-select: none;
-            font-size: clamp(12px, 2.5vw, 22px);
+            font-size: clamp(18px, 2.5vw, 22px);
         }
 
         .cell-number {
@@ -99,34 +99,30 @@
             border-radius: 4px;
         }
 
-        /* カード */
         .card {
-            width: 100px;
-            /* 既存サイズ */
+            flex: 0 0 auto;
+            /* 横スクロールで縮まらない */
+            width: clamp(80px, 12vw, 140px);
+            /* スマホ小さめ、PC大きめ */
             aspect-ratio: 766/575;
+            /* 元画像比率維持 */
             border-radius: 12px;
             overflow: hidden;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            padding: 0;
-            /* 内側余白をなくす */
-            margin: 0;
-            /* 外側余白も必要に応じ調整 */
+            cursor: pointer;
+            transition: transform 0.2s, border 0.2s;
         }
 
-
+        /* カード画像 */
         .card-img {
             width: 100%;
-            /* カード幅に合わせる */
+            /* カード内に収める */
             height: 100%;
-            /* カード高さに合わせる */
             object-fit: contain;
-            /* 枠いっぱいに画像を収める */
-            display: block;
-            margin: 0;
-            /* 余白なし */
+            /* 枠いっぱいに表示 */
         }
 
 
