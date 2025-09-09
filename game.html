@@ -19,27 +19,30 @@
         }
 
         .app-wrapper {
-            width: 390px;
-            max-width: 100%;
+            width: 100%;
             height: 100vh;
             background-color: #001f3f;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
+            justify-content: center;
+            /* ← 中央に配置 */
+            box-sizing: border-box;
+            padding: 20px;
+            position: relative;
         }
 
-
+        /* 戻るボタン（大きくして左上固定） */
         #top-bar {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            padding: 10px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
         }
 
         .button {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            /* ← サイズアップ */
+            height: 50px;
             background-color: #ccc;
             display: flex;
             justify-content: center;
@@ -47,26 +50,35 @@
             cursor: pointer;
             user-select: none;
             font-weight: bold;
-            font-size: 1.2em;
-            margin-left: 10px;
+            font-size: 1.8em;
+            /* ← 矢印も大きく */
+            border-radius: 8px;
         }
 
+        /* 盤面をスマホ横幅いっぱいまで広げる */
         #board-container {
             display: grid;
-            margin: 20px 0;
-            grid-gap: 1px;
+            margin: 20px auto;
+            grid-gap: 2px;
+            max-width: 90vw;
+            /* ← スマホ横幅の9割に制限 */
         }
 
+        /* セルを自動調整 */
         .cell,
         .cell-number {
-            width: 40px;
-            height: 40px;
+            aspect-ratio: 1 / 1;
+            /* 正方形を維持 */
+            width: 100%;
+            max-width: calc(90vw / 10);
+            /* ← 最大で10列対応、列数で自動調整 */
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
             border: 1px solid black;
             user-select: none;
+            font-size: 1rem;
         }
 
         .cell-number {
@@ -76,25 +88,16 @@
         #cards-container {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-top: 20px;
             overflow-x: auto;
             padding: 10px;
-            max-width: 100%;
-        }
-
-        #cards-container::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        #cards-container::-webkit-scrollbar-thumb {
-            background-color: #888;
-            border-radius: 4px;
+            max-width: 90vw;
         }
 
         .card {
             flex: 0 0 auto;
-            width: 100px;
-            height: 80px;
+            width: 90px;
+            height: 70px;
             cursor: pointer;
             user-select: none;
             font-weight: bold;
@@ -111,25 +114,6 @@
         .card.selected {
             border: 3px solid yellow;
             transform: scale(1.1);
-        }
-
-        #clear-overlay {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            padding: 20px;
-            border: 2px solid #000;
-            text-align: center;
-            display: none;
-            z-index: 100;
-        }
-
-        #clear-overlay button {
-            margin: 10px;
-            padding: 5px 15px;
-            cursor: pointer;
         }
     </style>
 
