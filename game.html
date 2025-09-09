@@ -26,9 +26,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
-            padding: 10px;
+            justify-content: flex-start;
+            /* 上寄せ */
+            padding-top: 10px;
+            /* 戻るボタンの上は最小限 */
             box-sizing: border-box;
+            overflow: hidden;
         }
 
         /* 上部バー */
@@ -54,10 +57,10 @@
             border-radius: 8px;
         }
 
-        /* ボード */
         #board-container {
             display: grid;
-            margin: 20px 0;
+            margin: 20px 0 40px 0;
+            /* 下に余白を増やしてカードとの間隔を広げる */
             grid-gap: 1px;
             justify-content: center;
         }
@@ -77,16 +80,13 @@
             background-color: #aaa;
         }
 
-        /* カードコンテナ */
         #cards-container {
             display: flex;
-            /* 横並びにする */
             gap: 14px;
-            /* カード間のスペース */
             overflow-x: auto;
-            /* 横スクロール可能 */
-            padding: 0 10px 0 0;
-            /* 左右に余白 */
+            padding: 0 10px;
+            max-width: 100%;
+            justify-content: flex-start;
             box-sizing: border-box;
         }
 
@@ -101,11 +101,9 @@
 
         .card {
             flex: 0 0 auto;
-            /* 横スクロールで縮まらない */
-            width: clamp(80px, 12vw, 140px);
-            /* スマホ小さめ、PC大きめ */
+            width: 120px;
+            /* PC用サイズ */
             aspect-ratio: 766/575;
-            /* 元画像比率維持 */
             border-radius: 12px;
             overflow: hidden;
             position: relative;
@@ -116,13 +114,11 @@
             transition: transform 0.2s, border 0.2s;
         }
 
-        /* カード画像 */
         .card-img {
             width: 100%;
-            /* カード内に収める */
             height: 100%;
             object-fit: contain;
-            /* 枠いっぱいに表示 */
+            display: block;
         }
 
 
@@ -163,6 +159,13 @@
             margin: 10px;
             padding: 5px 15px;
             cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 240px;
+                /* PCの2倍 */
+            }
         }
     </style>
 </head>
