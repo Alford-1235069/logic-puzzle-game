@@ -11,7 +11,7 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             background-color: #001f3f;
             font-family: sans-serif;
             height: 100vh;
@@ -21,7 +21,7 @@
 
         .app-wrapper {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background-color: #001f3f;
             display: flex;
             flex-direction: column;
@@ -37,7 +37,7 @@
             width: 100%;
             display: flex;
             justify-content: flex-start;
-            padding: 10px;
+            padding: 5px 10px;
         }
 
         .button {
@@ -57,7 +57,7 @@
 
         #board-container {
             display: grid;
-            margin: 20px 0 50px 0;
+            margin: 20px 0 60px 0;
             grid-gap: 1px;
             justify-content: center;
         }
@@ -70,7 +70,7 @@
             font-weight: bold;
             border: 1px solid black;
             user-select: none;
-            font-size: clamp(18px, 2.5vw, 22px);
+            font-size: clamp(18px, 3vw, 22px);
         }
 
         .cell-number {
@@ -79,11 +79,10 @@
 
         #cards-container {
             display: flex;
-            gap: 14px;
+            gap: 10px;
             overflow-x: auto;
-            padding: 0 10px;
+            padding: 0 10px 10px 10px;
             max-width: 100%;
-            justify-content: flex-start;
             box-sizing: border-box;
         }
 
@@ -97,8 +96,7 @@
         }
 
         .card {
-            flex: 0 0 auto;
-            width: 200px;
+            flex: 0 0 150px;
             aspect-ratio: 766/575;
             border-radius: 12px;
             overflow: hidden;
@@ -121,13 +119,13 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-weight: bold;
-            font-size: clamp(14px, 2vw, 20px);
+            font-size: clamp(14px, 3vw, 20px);
             color: black;
             text-shadow: 1px 1px 2px white;
             text-align: center;
             pointer-events: none;
             white-space: pre-line;
-            /* 改行対応 */
+            /* 改行を反映 */
         }
 
         .card.selected {
@@ -155,31 +153,29 @@
             cursor: pointer;
         }
 
-        /* スマホ対応 */
+        /* スマホ用 */
         @media (max-width: 768px) {
+            .card {
+                flex: 0 0 240px;
+            }
+
+            .card-label {
+                font-size: clamp(18px, 4vw, 24px);
+            }
+
             #back-button {
-                width: 90px;
-                height: 90px;
+                width: 80px;
+                height: 80px;
                 font-size: 24px;
             }
 
             #board-container {
-                margin-top: 20px;
-                margin-bottom: 60px;
+                margin: 30px 0 80px 0;
             }
 
             .cell,
             .cell-number {
-                font-size: clamp(20px, 5vw, 28px);
-            }
-
-            .card {
-                width: calc((100% - 28px) / 3);
-                /* 3枚並べて画面幅いっぱい */
-            }
-
-            .card-label {
-                font-size: clamp(18px, 4vw, 22px);
+                font-size: clamp(22px, 5vw, 26px);
             }
         }
     </style>
@@ -279,9 +275,11 @@
 
                 const label = document.createElement('span');
                 label.className = 'card-label';
-                label.textContent = (card.type !== 'NOT' && card.sequence)
-                    ? `${card.type}\n${card.sequence.join('')}` // 改行で2段表示
-                    : card.type;
+                if (card.type !== 'NOT' && card.sequence) {
+                    label.textContent = `${card.type}\n${card.sequence.join('')}`;
+                } else {
+                    label.textContent = card.type;
+                }
                 div.appendChild(label);
 
                 div.addEventListener('click', () => {
