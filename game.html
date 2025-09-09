@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Logic Puzzle Game</title>
     <style>
+        /* 全体設定 */
         body {
             margin: 0;
             padding: 0;
@@ -30,6 +31,7 @@
             box-sizing: border-box;
         }
 
+        /* 上部バー */
         #top-bar {
             width: 100%;
             display: flex;
@@ -38,10 +40,8 @@
         }
 
         .button {
-            width: 12vw;
-            height: 12vw;
-            max-width: 60px;
-            max-height: 60px;
+            width: clamp(50px, 12vw, 80px);
+            height: clamp(50px, 12vw, 80px);
             background-color: #ccc;
             display: flex;
             justify-content: center;
@@ -49,13 +49,15 @@
             cursor: pointer;
             user-select: none;
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: clamp(16px, 3vw, 22px);
             margin-left: 10px;
+            border-radius: 8px;
         }
 
+        /* ボード */
         #board-container {
             display: grid;
-            margin: 10px 0;
+            margin: 20px 0;
             grid-gap: 1px;
             justify-content: center;
         }
@@ -75,14 +77,17 @@
             background-color: #aaa;
         }
 
+        /* カードコンテナ */
         #cards-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            /* 横並びにする */
+            gap: 14px;
+            /* カード間のスペース */
             overflow-x: auto;
-            padding: 10px;
-            max-width: 100%;
-            justify-content: center;
+            /* 横スクロール可能 */
+            padding: 0 10px 0 0;
+            /* 左右に余白 */
+            box-sizing: border-box;
         }
 
         #cards-container::-webkit-scrollbar {
@@ -94,29 +99,57 @@
             border-radius: 4px;
         }
 
+        /* カード */
         .card {
-            flex: 0 0 auto;
-            aspect-ratio: 5 / 4;
-            width: clamp(90px, 18vw, 160px);
-            cursor: pointer;
-            user-select: none;
-            font-weight: bold;
-            background-size: cover;
-            background-position: center;
-            transition: all 0.2s;
+            width: 100px;
+            /* 既存サイズ */
+            aspect-ratio: 766/575;
+            border-radius: 12px;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
+            position: relative;
+            padding: 0;
+            /* 内側余白をなくす */
+            margin: 0;
+            /* 外側余白も必要に応じ調整 */
+        }
+
+
+        .card-img {
+            width: 100%;
+            /* カード幅に合わせる */
+            height: 100%;
+            /* カード高さに合わせる */
+            object-fit: contain;
+            /* 枠いっぱいに画像を収める */
+            display: block;
+            margin: 0;
+            /* 余白なし */
+        }
+
+
+
+        .card-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            font-size: clamp(14px, 2vw, 20px);
             color: black;
-            font-size: clamp(12px, 2.5vw, 20px);
+            text-shadow: 1px 1px 2px white;
+            text-align: center;
+            pointer-events: none;
         }
 
         .card.selected {
             border: 3px solid yellow;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
+        /* ステージクリア */
         #clear-overlay {
             position: fixed;
             top: 50%;
@@ -168,12 +201,10 @@
         const boardContainer = document.getElementById('board-container');
 
         function resizeBoard() {
-            // セルの最大サイズを計算（幅と高さの制約を考慮）
             const cellSize = Math.min(
                 (window.innerWidth * 0.9) / (cols + 1),
                 (window.innerHeight * 0.6) / (rows + 1)
             );
-
             boardContainer.style.gridTemplateColumns = `repeat(${cols + 1}, ${cellSize}px)`;
             boardContainer.style.gridAutoRows = `${cellSize}px`;
         }
@@ -226,11 +257,18 @@
                     case 'AND': imgSrc = 'pictures/and_Btn.png'; break;
                     case 'XOR': imgSrc = 'pictures/xor_Btn.png'; break;
                 }
-                div.style.backgroundImage = `url(${imgSrc})`;
 
-                let label = card.type;
-                if (card.type !== 'NOT' && card.sequence) label += ' ' + card.sequence.join('');
-                div.textContent = label;
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.className = 'card-img';
+                div.appendChild(img);
+
+                const label = document.createElement('span');
+                label.className = 'card-label';
+                label.textContent = (card.type !== 'NOT' && card.sequence)
+                    ? `${card.type} ${card.sequence.join('')}`
+                    : card.type;
+                div.appendChild(label);
 
                 div.addEventListener('click', () => {
                     selectedCard = idx;
