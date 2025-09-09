@@ -51,8 +51,8 @@
             user-select: none;
             font-weight: bold;
             font-size: clamp(16px, 3vw, 22px);
-            margin-left: 10px;
             border-radius: 8px;
+            margin-left: 0;
         }
 
         #board-container {
@@ -126,7 +126,6 @@
             text-align: center;
             pointer-events: none;
             white-space: pre-line;
-            /* 改行反映 */
         }
 
         .card.selected {
@@ -162,8 +161,23 @@
                 font-size: 24px;
             }
 
+            #board-container {
+                margin-top: 20px;
+                margin-bottom: 60px;
+            }
+
             .card-label {
                 font-size: 20px;
+            }
+
+            .cell,
+            .cell-number {
+                font-size: clamp(24px, 5vw, 28px);
+            }
+
+            .card {
+                flex: 1 1 0;
+                min-width: calc((100% - 28px) / 3);
             }
         }
     </style>
@@ -206,26 +220,12 @@
             boardContainer.style.gridTemplateColumns = `repeat(${cols + 1}, ${cellSize}px)`;
             boardContainer.style.gridAutoRows = `${cellSize}px`;
 
-            // スマホ用に盤面上下間隔調整
             if (window.innerWidth <= 768) {
                 boardContainer.style.marginTop = '20px';
                 boardContainer.style.marginBottom = '60px';
             } else {
                 boardContainer.style.marginTop = '0px';
                 boardContainer.style.marginBottom = '40px';
-            }
-        }
-
-        function adjustBackButtonSize() {
-            const backBtn = document.getElementById('back-button');
-            if (window.innerWidth <= 768) {
-                backBtn.style.width = '80px';
-                backBtn.style.height = '80px';
-                backBtn.style.fontSize = '24px';
-            } else {
-                backBtn.style.width = '';
-                backBtn.style.height = '';
-                backBtn.style.fontSize = '';
             }
         }
 
@@ -301,7 +301,6 @@
             });
         }
 
-        // 以下は従来通りの行列クリック処理・カード適用・クリア判定
         function addRowColListeners() {
             document.querySelectorAll('.cell-number').forEach(cell => {
                 const isRow = cell.dataset.row !== undefined;
@@ -326,10 +325,14 @@
                     const card = stage.cards[selectedCard];
                     if (isRow) {
                         const r = parseInt(cell.dataset.row);
-                        for (let c = 0; c < cols; c++) applyCard(card, r, c, 'row');
+                        for (let c = 0; c < cols; c++) {
+                            applyCard(card, r, c, 'row');
+                        }
                     } else if (isCol) {
                         const c = parseInt(cell.dataset.col);
-                        for (let r = 0; r < rows; r++) applyCard(card, r, c, 'col');
+                        for (let r = 0; r < rows; r++) {
+                            applyCard(card, r, c, 'col');
+                        }
                     }
                     usedCards.add(selectedCard);
                     selectedCard = null;
@@ -372,10 +375,11 @@
         });
 
         window.addEventListener('resize', () => {
-            renderBoard();
+            resizeBoard();
             adjustBackButtonSize();
         });
 
+        // 初期表示
         renderBoard();
         renderCards();
         adjustBackButtonSize();
