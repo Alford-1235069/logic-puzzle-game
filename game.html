@@ -38,7 +38,9 @@
             width: 100%;
             display: flex;
             justify-content: flex-start;
-            padding: 10px;
+            /* 上下左右に均等な余白 */
+            padding: 10px 15px;
+            /* 上下10px、左右15px */
         }
 
         .button {
@@ -52,7 +54,8 @@
             user-select: none;
             font-weight: bold;
             font-size: 24px;
-            margin-left: 10px;
+            margin-left: 0;
+            /* 余白はtop-barのpaddingで調整 */
             border-radius: 8px;
         }
 
@@ -76,6 +79,7 @@
 
         .cell-number {
             background-color: #aaa;
+            /* 行列番号の背景色 */
         }
 
         #cards-container {
@@ -148,15 +152,12 @@
             display: none;
             z-index: 100;
             width: 90%;
-            /* 横幅いっぱいに拡大 */
             max-width: 600px;
-            /* PCでも大きすぎない */
             box-sizing: border-box;
         }
 
         #clear-overlay p {
             font-size: 28px;
-            /* スマホでも大きく表示 */
             margin: 10px 0;
         }
 
