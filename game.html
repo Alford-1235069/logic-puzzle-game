@@ -11,7 +11,7 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             background-color: #001f3f;
             font-family: sans-serif;
             height: 100vh;
@@ -51,8 +51,9 @@
             user-select: none;
             font-weight: bold;
             font-size: clamp(16px, 3vw, 22px);
+            margin-left: 10px;
             border-radius: 8px;
-            margin-left: 0;
+            flex-shrink: 0;
         }
 
         #board-container {
@@ -98,6 +99,7 @@
 
         .card {
             flex: 1 1 0;
+            min-width: 120px;
             aspect-ratio: 766/575;
             border-radius: 12px;
             overflow: hidden;
@@ -106,6 +108,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .card-img {
@@ -166,17 +169,16 @@
                 margin-bottom: 60px;
             }
 
-            .card-label {
-                font-size: 20px;
-            }
-
             .cell,
             .cell-number {
                 font-size: clamp(24px, 5vw, 28px);
             }
 
+            .card-label {
+                font-size: 20px;
+            }
+
             .card {
-                flex: 1 1 0;
                 min-width: calc((100% - 28px) / 3);
             }
         }
@@ -219,14 +221,6 @@
             );
             boardContainer.style.gridTemplateColumns = `repeat(${cols + 1}, ${cellSize}px)`;
             boardContainer.style.gridAutoRows = `${cellSize}px`;
-
-            if (window.innerWidth <= 768) {
-                boardContainer.style.marginTop = '20px';
-                boardContainer.style.marginBottom = '60px';
-            } else {
-                boardContainer.style.marginTop = '0px';
-                boardContainer.style.marginBottom = '40px';
-            }
         }
 
         function renderBoard() {
@@ -285,11 +279,9 @@
 
                 const label = document.createElement('span');
                 label.className = 'card-label';
-                if (card.type !== 'NOT' && card.sequence) {
-                    label.textContent = `${card.type}\n${card.sequence.join('')}`;
-                } else {
-                    label.textContent = card.type;
-                }
+                label.textContent = (card.type !== 'NOT' && card.sequence)
+                    ? `${card.type}\n${card.sequence.join('')}`
+                    : card.type;
                 div.appendChild(label);
 
                 div.addEventListener('click', () => {
@@ -374,15 +366,11 @@
             window.location.href = 'stage_select.html';
         });
 
-        window.addEventListener('resize', () => {
-            resizeBoard();
-            adjustBackButtonSize();
-        });
+        window.addEventListener('resize', () => renderBoard());
 
         // 初期表示
         renderBoard();
         renderCards();
-        adjustBackButtonSize();
     </script>
 </body>
 
