@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Logic Puzzle Game</title>
     <style>
-        /* 全体設定 */
         body {
             margin: 0;
             padding: 0;
@@ -27,9 +26,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            /* 上寄せ */
             padding-top: 10px;
-            /* 戻るボタンの上は最小限 */
+            /* 戻るボタン上は最小限 */
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -103,7 +101,6 @@
             flex: 1 1 0;
             /* 横幅を均等に伸ばす */
             aspect-ratio: 766/575;
-            /* 比率維持 */
             border-radius: 12px;
             overflow: hidden;
             position: relative;
@@ -119,8 +116,6 @@
             object-fit: contain;
         }
 
-
-
         .card-label {
             position: absolute;
             top: 50%;
@@ -132,6 +127,8 @@
             text-shadow: 1px 1px 2px white;
             text-align: center;
             pointer-events: none;
+            white-space: pre-line;
+            /* 改行を反映 */
         }
 
         .card.selected {
@@ -159,10 +156,28 @@
             cursor: pointer;
         }
 
+        /* スマホ対応 */
         @media (max-width: 768px) {
-            .card {
-                width: 240px;
-                /* PCの2倍 */
+
+            /* 戻るボタンを大きく */
+            #back-button {
+                width: 80px;
+                height: 80px;
+                font-size: 24px;
+            }
+
+            /* 戻るボタンと盤面、盤面とカードの間隔を広げる */
+            .app-wrapper {
+                padding-top: 20px;
+            }
+
+            #board-container {
+                margin-bottom: 60px;
+            }
+
+            /* カード文字を大きく */
+            .card-label {
+                font-size: 20px;
             }
         }
     </style>
@@ -262,10 +277,13 @@
 
                 const label = document.createElement('span');
                 label.className = 'card-label';
-                label.textContent = (card.type !== 'NOT' && card.sequence)
-                    ? `${card.type} ${card.sequence.join('')}`
-                    : card.type;
+                if (card.type !== 'NOT' && card.sequence) {
+                    label.textContent = `${card.type}\n${card.sequence.join('')}`; // 改行して2段表示
+                } else {
+                    label.textContent = card.type;
+                }
                 div.appendChild(label);
+
 
                 div.addEventListener('click', () => {
                     selectedCard = idx;
