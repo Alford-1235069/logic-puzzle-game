@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logic Puzzle Game</title>
     <style>
         /* 全体設定 */
@@ -52,7 +51,6 @@
             user-select: none;
             font-weight: bold;
             font-size: 24px;
-            margin-left: 0;
             border-radius: 8px;
         }
 
@@ -140,14 +138,14 @@
             display: flex;
             justify-content: center;
             margin: 20px 0;
-            width: 70%;
-            /* スマホ用デフォルト */
+            width: 40%;
         }
 
         #reset-button {
             position: relative;
             width: 100%;
             aspect-ratio: 300/100;
+            /* re_Btn.png の比率 */
             border: none;
             background: url("pictures/re_Btn.png") no-repeat center center;
             background-size: contain;
@@ -161,23 +159,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-weight: bold;
-            font-size: 40px;
-            /* スマホ用 */
+            font-size: 22px;
             color: white;
             text-shadow: 2px 2px 3px black;
             pointer-events: none;
-        }
-
-        /* PC（769px以上）のとき */
-        @media screen and (min-width: 769px) {
-            #reset-wrapper {
-                width: 40%;
-            }
-
-            #reset-button .reset-label {
-                font-size: 22px;
-                /* PC用 */
-            }
         }
 
         /* ステージクリア */
@@ -234,11 +219,11 @@
         <button id="to-select">ステージ選択へ戻る</button>
     </div>
 
-    <!-- ステージデータ -->
+    <!-- JS読み込み -->
     <script src="stages_contents.js"></script>
-
-    <!-- ゲーム本体 -->
+    <script src="game.js"></script>
     <script>
+        // ---------- game.js の内容 ----------
         let stageId = parseInt(new URLSearchParams(window.location.search).get("id") || 0);
         const stage = stages.find(s => s.id === stageId);
         const rows = parseInt(stage.size.split('x')[0]);
@@ -401,16 +386,16 @@
             window.location.href = 'stage_select.html';
         });
 
-        window.addEventListener('resize', () => renderBoard());
-
-        // 🔹 リセットボタン機能
+        // リセットボタン処理
         document.getElementById('reset-button').addEventListener('click', () => {
-            board = JSON.parse(JSON.stringify(stage.question)); // 初期化
+            board = JSON.parse(JSON.stringify(stage.question));
             usedCards.clear();
             selectedCard = null;
             renderBoard();
             renderCards();
         });
+
+        window.addEventListener('resize', () => renderBoard());
 
         renderBoard();
         renderCards();
