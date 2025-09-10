@@ -76,7 +76,6 @@
             background-color: #aaa;
         }
 
-        /* カード一覧 */
         #cards-container {
             display: flex;
             gap: 20px;
@@ -86,17 +85,15 @@
             justify-content: flex-start;
             box-sizing: border-box;
             margin-bottom: 20px;
-
-            /* スクロールバー非表示 */
-            scrollbar-width: none;
-            /* Firefox */
-            -ms-overflow-style: none;
-            /* IE/Edge */
         }
 
         #cards-container::-webkit-scrollbar {
-            display: none;
-            /* Chrome/Safari */
+            height: 8px;
+        }
+
+        #cards-container::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 4px;
         }
 
         .card {
@@ -109,9 +106,6 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-
-            /* 横スクロール時に幅固定 */
-            flex: 0 0 auto;
         }
 
         .card-img {
@@ -151,6 +145,7 @@
             position: relative;
             width: 100%;
             aspect-ratio: 300/100;
+            /* re_Btn.png の比率 */
             border: none;
             background: url("pictures/re_Btn.png") no-repeat center center;
             background-size: contain;
