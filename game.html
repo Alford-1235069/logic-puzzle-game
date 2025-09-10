@@ -2,7 +2,6 @@
 <html lang="ja">
 
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logic Puzzle Game</title>
@@ -72,6 +71,7 @@
             border: 1px solid black;
             user-select: none;
             font-size: 24px;
+            /* 盤面フォントサイズ（PC） */
         }
 
         .cell-number {
@@ -163,6 +163,7 @@
             transform: translate(-50%, -50%);
             font-weight: bold;
             font-size: 22px;
+            /* ボタン文字サイズ（PC） */
             color: white;
             text-shadow: 2px 2px 3px black;
             pointer-events: none;
@@ -199,12 +200,20 @@
 
         /* ---------- スマホ用調整 ---------- */
         @media screen and (max-width: 480px) {
+
+            /* 盤面文字サイズだけ変更 */
+            .cell,
+            .cell-number {
+                font-size: 18px;
+            }
+
+            /* リセットボタン */
             #reset-wrapper {
-                width: 70%;
+                width: 60%;
             }
 
             #reset-button .reset-label {
-                font-size: 22px;
+                font-size: 20px;
             }
         }
     </style>
@@ -329,91 +338,4 @@
 
         function addRowColListeners() {
             document.querySelectorAll('.cell-number').forEach(cell => {
-                const isRow = cell.dataset.row !== undefined;
-                const isCol = cell.dataset.col !== undefined;
-                cell.addEventListener('mouseenter', () => {
-                    if (selectedCard === null) return;
-                    if (isRow) {
-                        const r = parseInt(cell.dataset.row);
-                        for (let c = 0; c < cols; c++) {
-                            boardContainer.children[(r + 1) * (cols + 1) + c + 1].style.backgroundColor = '#ff0';
-                        }
-                    } else if (isCol) {
-                        const c = parseInt(cell.dataset.col);
-                        for (let r = 0; r < rows; r++) {
-                            boardContainer.children[(r + 1) * (cols + 1) + c + 1].style.backgroundColor = '#ff0';
-                        }
-                    }
-                });
-                cell.addEventListener('mouseleave', () => { renderBoard(); });
-                cell.addEventListener('click', () => {
-                    if (selectedCard === null) return;
-                    const card = stage.cards[selectedCard];
-                    if (isRow) {
-                        const r = parseInt(cell.dataset.row);
-                        for (let c = 0; c < cols; c++) {
-                            applyCard(card, r, c, 'row');
-                        }
-                    } else if (isCol) {
-                        const c = parseInt(cell.dataset.col);
-                        for (let r = 0; r < rows; r++) {
-                            applyCard(card, r, c, 'col');
-                        }
-                    }
-                    usedCards.add(selectedCard);
-                    selectedCard = null;
-                    renderBoard();
-                    renderCards();
-                    checkClear();
-                });
-            });
-        }
-
-        function applyCard(card, r, c, type) {
-            if (card.type === 'NOT') board[r][c] = board[r][c] ? 0 : 1;
-            if (card.type === 'OR' && card.sequence) board[r][c] = board[r][c] | (type === 'row' ? card.sequence[c] : card.sequence[r]);
-            if (card.type === 'AND' && card.sequence) board[r][c] = board[r][c] & (type === 'row' ? card.sequence[c] : card.sequence[r]);
-            if (card.type === 'XOR' && card.sequence) board[r][c] = board[r][c] ^ (type === 'row' ? card.sequence[c] : card.sequence[r]);
-        }
-
-        function checkClear() {
-            let cleared = true;
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    if (board[r][c] !== stage.goal[r][c]) cleared = false;
-                }
-            }
-            if (cleared) showClearOverlay();
-        }
-
-        function showClearOverlay() {
-            document.getElementById('back-button').style.pointerEvents = 'none';
-            const overlay = document.getElementById('clear-overlay');
-            overlay.style.display = 'block';
-            document.getElementById('next-stage').style.display = (stageId >= 12) ? 'none' : 'inline-block';
-            document.getElementById('next-stage').onclick = () => window.location.href = `game.html?id=${stageId + 1}`;
-            document.getElementById('to-select').onclick = () => window.location.href = 'stage_select.html';
-            if (stageId >= 12) setTimeout(() => window.location.href = 'stage_select.html', 2000);
-        }
-
-        document.getElementById('back-button').addEventListener('click', () => {
-            window.location.href = 'stage_select.html';
-        });
-
-        // リセットボタン処理
-        document.getElementById('reset-button').addEventListener('click', () => {
-            board = JSON.parse(JSON.stringify(stage.question));
-            usedCards.clear();
-            selectedCard = null;
-            renderBoard();
-            renderCards();
-        });
-
-        window.addEventListener('resize', () => renderBoard());
-
-        renderBoard();
-        renderCards();
-    </script>
-</body>
-
-</html>
+                const isRow = cell.dataset
