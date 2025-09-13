@@ -101,7 +101,6 @@
             width: 100%;
         }
 
-
         .card {
             aspect-ratio: 766/575;
             border-radius: 12px;
@@ -149,7 +148,6 @@
             justify-content: center;
             width: 200px;
         }
-
 
         #reset-button {
             width: 100%;
@@ -401,6 +399,12 @@
             }
 
             function showClearOverlay() {
+                // ★ ここでクリア状況を保存 ★
+                let totalStages = 14;
+                let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
+                stageClear[stageId] = true;
+                localStorage.setItem('stageClear', JSON.stringify(stageClear));
+
                 document.getElementById('back-button').style.pointerEvents = 'none';
                 const overlay = document.getElementById('clear-overlay');
                 overlay.style.display = 'block';
