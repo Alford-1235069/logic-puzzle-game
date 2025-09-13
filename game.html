@@ -90,8 +90,6 @@
         #cards-container-wrapper {
             width: 100%;
             overflow-x: auto;
-            overflow-y: hidden;
-            /* 縦スクロール禁止 */
         }
 
         #cards-container {
@@ -100,9 +98,7 @@
             padding: 0 5px;
             margin-bottom: 10px;
             justify-content: center;
-            flex-wrap: nowrap;
             width: 100%;
-            box-sizing: border-box;
         }
 
 
@@ -153,6 +149,7 @@
             justify-content: center;
             width: 200px;
         }
+
 
         #reset-button {
             width: 100%;
@@ -212,8 +209,7 @@
 
         @media (pointer: coarse) {
             #cards-container-wrapper {
-                overflow-x: auto;
-                /* タッチでも横スクロール可能 */
+                overflow-x: hidden;
             }
         }
     </style>
@@ -251,10 +247,7 @@
 
         function positionAppWrapper() {
             if (!bgImg.complete || bgImg.naturalWidth === 0) {
-                bgImg.onload = () => {
-                    requestAnimationFrame(positionAppWrapper);
-                    renderCards(); // ★画像読み込み後にカード描画
-                };
+                bgImg.onload = () => requestAnimationFrame(positionAppWrapper);
                 return;
             }
             const rect = bgImg.getBoundingClientRect();
@@ -269,23 +262,16 @@
         function resizeCards() {
             const rect = bgImg.getBoundingClientRect();
             const cardWidth = rect.width * 0.28;
-            const cardsContainer = document.getElementById('cards-container');
-
             document.querySelectorAll('.card').forEach(card => {
                 card.style.width = cardWidth + 'px';
                 card.style.flex = `0 0 ${cardWidth}px`;
             });
-
-            // カード数が少ない場合も中央に寄せる
-            const totalWidth = cardWidth * cardsContainer.children.length + 5 * (cardsContainer.children.length - 1);
-            cardsContainer.style.justifyContent = (totalWidth < rect.width) ? 'center' : 'flex-start';
         }
 
         window.addEventListener('resize', () => {
             clearTimeout(window._bgPosTimer);
             window._bgPosTimer = setTimeout(positionAppWrapper, 50);
         });
-
         positionAppWrapper();
 
         /* ===== ゲームロジック ===== */
@@ -365,7 +351,6 @@
                     cardsContainer.appendChild(div);
                 });
                 resizeCards();
-                document.body.style.overflow = 'hidden'; // 縦スクロール禁止
             }
 
             function addRowColListeners() {
@@ -435,11 +420,8 @@
                 selectedCard = null;
                 renderBoard();
                 renderCards();
-                positionAppWrapper();
-                document.body.style.overflow = 'hidden';
             });
 
-            // 最初に描画
             setTimeout(() => { renderBoard(); renderCards(); }, 200);
         }
     </script>
