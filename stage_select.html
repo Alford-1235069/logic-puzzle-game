@@ -11,31 +11,47 @@
       src: url('fonts/DotGothic16-Regular.ttf') format('truetype');
     }
 
+    html,
     body {
       margin: 0;
-      font-family: 'DotGothic16', sans-serif;
-      background-color: #22325c;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 0;
+      width: 100vw;
       height: 100vh;
       overflow: hidden;
+      font-family: 'DotGothic16', sans-serif;
+      background-color: black;
     }
 
+    /* 背景画像（固定） */
+    #bg-img {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      height: 100vh;
+      object-fit: contain;
+      z-index: 0;
+    }
+
+    /* アプリ全体 */
     .app-wrapper {
-      width: 390px;
-      max-width: 100%;
-      height: 844px;
-      min-height: 100vh;
-      background-color: #001f3f;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      /* 横中央揃え */
       overflow-y: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      /* スクロール可能 */
       box-sizing: border-box;
-      padding: 20px 0;
+      padding-top: 100px;
+      /* 上部余白 */
+      z-index: 1;
     }
 
     .app-wrapper::-webkit-scrollbar {
@@ -47,14 +63,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      /* 横中央揃え */
       gap: 50px;
-      flex: 1;
-      justify-content: flex-start;
-      padding-top: 100px;
+      padding-bottom: 50px;
     }
 
     .stage-btn {
-      width: 50vw;
+      width: 50%;
+      /* 背景に対して横幅50% */
       max-width: 300px;
       height: 150px;
       cursor: pointer;
@@ -85,7 +101,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #22325c;
+      color: #fff;
+      /* 文字白 */
       font-weight: bold;
       font-size: clamp(15px, 2vw, 18px);
       pointer-events: none;
@@ -106,17 +123,39 @@
 </head>
 
 <body>
+  <!-- 背景画像 -->
+  <img id="bg-img" src="bg/bg01.png" alt="背景">
+
   <div class="app-wrapper">
     <div id="stage-container"></div>
   </div>
 
   <script>
-    const totalStages = 14; 
+    const totalStages = 14;
     const container = document.getElementById("stage-container");
 
-    let stageStatus = [true, ...Array(totalStages - 1).fill(false)]; 
-    let stageClear = Array(totalStages).fill(false);
+    // ステージクリア状況を取得（未保存なら初期値 false）
+    let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
 
+    // 背景画像更新（クリア状況に応じて変化）
+    function updateBackground() {
+      const bgImg = document.getElementById('bg-img');
+      const lastClearedIndex = stageClear.lastIndexOf(true);
+      let bgNumber = lastClearedIndex + 2; // 最初は bg01.png
+      if (bgNumber > totalStages) bgNumber = totalStages; // 最大は totalStages
+      bgImg.src = `bg/bg${String(bgNumber).padStart(2, '0')}.png`;
+    }
+
+    // 初期背景設定
+    updateBackground();
+
+    // ステータス設定（最初のステージは解放済み）
+    let stageStatus = [true, ...Array(totalStages - 1).fill(false)];
+    stageClear.forEach((cleared, i) => {
+      if (cleared && i + 1 < totalStages) stageStatus[i + 1] = true; // 前のステージクリアで次ステージ解放
+    });
+
+    // ステージボタン生成
     for (let i = 0; i < totalStages; i++) {
       const btn = document.createElement("div");
       btn.className = "stage-btn";
@@ -130,7 +169,7 @@
       const label = document.createElement("span");
       label.className = "label";
 
-      // ロック
+      // ロック表示
       if (!stageStatus[i]) {
         const leftIcon = document.createElement("img");
         leftIcon.className = "inline-icon";
