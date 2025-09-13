@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap and release</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #22325c;
+            color: #22325c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: 'DotGothic16', sans-serif;
+            cursor: pointer;
+            position: relative;
+        }
+
+        @font-face {
+            font-family: 'DotGothic16';
+            src: url('fonts/DotGothic16-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .logo-img {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 1.0em;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #fff;
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 30px;
+            font-size: 1.2em;
+            opacity: 0.7;
+            color: #fff;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50%,
+            100% {
+                opacity: 0.7;
+            }
+
+            25%,
+            75% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img src="pictures/logo.png" class="logo-img" />
+    <div class="title">Tap and release</div>
+    <div class="instruction">画面をタップしてスタート</div>
+
+    <script>
+        // 画面クリックでステージ選択画面に遷移
+        document.body.addEventListener("click", () => {
+            location.href = "stage_select.html"; // ファイル名に注意: "_" が正しいか
+        });
+    </script>
+</body>
+
+</html>
