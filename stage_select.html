@@ -17,12 +17,11 @@
       padding: 0;
       width: 100vw;
       height: 100vh;
-      overflow: hidden;
       font-family: 'DotGothic16', sans-serif;
       background-color: black;
+      overflow: hidden;
     }
 
-    /* 背景画像（固定） */
     #bg-img {
       position: fixed;
       top: 0;
@@ -34,7 +33,6 @@
       z-index: 0;
     }
 
-    /* アプリ全体 */
     .app-wrapper {
       position: absolute;
       top: 0;
@@ -45,12 +43,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* 横中央揃え */
       overflow-y: auto;
-      /* スクロール可能 */
       box-sizing: border-box;
       padding-top: 100px;
-      /* 上部余白 */
       z-index: 1;
     }
 
@@ -63,14 +58,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* 横中央揃え */
       gap: 50px;
       padding-bottom: 50px;
     }
 
     .stage-btn {
       width: 50%;
-      /* 背景に対して横幅50% */
       max-width: 300px;
       height: 150px;
       cursor: pointer;
@@ -78,7 +71,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: transform .2s;
+      transition: transform 0.2s;
+      opacity: 1;
+      /* デフォルト100% */
     }
 
     .stage-btn img.button-img {
@@ -91,9 +86,9 @@
       transform: scale(1.05);
     }
 
-    .stage-btn.locked {
+    .stage-btn.locked.locked-locked {
       opacity: 0.6;
-      pointer-events: none;
+      /* ロック中だけ半透明 */
     }
 
     .label {
@@ -102,7 +97,6 @@
       left: 50%;
       transform: translate(-50%, -50%);
       color: #fff;
-      /* 文字白 */
       font-weight: bold;
       font-size: clamp(15px, 2vw, 18px);
       pointer-events: none;
@@ -123,7 +117,6 @@
 </head>
 
 <body>
-  <!-- 背景画像 -->
   <img id="bg-img" src="bg/bg01.png" alt="背景">
 
   <div class="app-wrapper">
@@ -134,65 +127,77 @@
     const totalStages = 14;
     const container = document.getElementById("stage-container");
 
-    // ステージクリア状況を取得（未保存なら初期値 false）
+    // クリア状況取得
     let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
 
-    // 背景画像更新（クリア状況に応じて変化）
     function updateBackground() {
       const bgImg = document.getElementById('bg-img');
-      const lastClearedIndex = stageClear.lastIndexOf(true);
-      let bgNumber = lastClearedIndex + 2; // 最初は bg01.png
-      if (bgNumber > totalStages) bgNumber = totalStages; // 最大は totalStages
+      const lastCleared = stageClear.lastIndexOf(true);
+      let bgNumber = lastCleared + 2;
+      if (bgNumber > totalStages) bgNumber = totalStages;
       bgImg.src = `bg/bg${String(bgNumber).padStart(2, '0')}.png`;
     }
-
-    // 初期背景設定
     updateBackground();
 
-    // ステータス設定（最初のステージは解放済み）
+    // ステータス設定
     let stageStatus = [true, ...Array(totalStages - 1).fill(false)];
     stageClear.forEach((cleared, i) => {
-      if (cleared && i + 1 < totalStages) stageStatus[i + 1] = true; // 前のステージクリアで次ステージ解放
+      if (cleared && i + 1 < totalStages) stageStatus[i + 1] = true;
     });
 
-    // ステージボタン生成
     for (let i = 0; i < totalStages; i++) {
       const btn = document.createElement("div");
       btn.className = "stage-btn";
-      if (!stageStatus[i]) btn.classList.add("locked");
 
       const img = document.createElement("img");
-      img.src = "pictures/stageBtn.png";
       img.className = "button-img";
+      img.src = "pictures/stageBtn.png"; // ボタン画像は常に同じ
       btn.appendChild(img);
 
       const label = document.createElement("span");
       label.className = "label";
 
-      // ロック表示
       if (!stageStatus[i]) {
+        // ロック中
+        btn.classList.add("locked", "locked-locked");
         const leftIcon = document.createElement("img");
         leftIcon.className = "inline-icon";
         leftIcon.src = "pictures/lock.png";
         label.appendChild(leftIcon);
-      }
 
-      // ステージ名
-      label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : `ステージ${i}`));
+        label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : `ステージ${i}`));
 
-      if (!stageStatus[i]) {
         const rightIcon = document.createElement("img");
         rightIcon.className = "inline-icon";
         rightIcon.src = "pictures/lock.png";
         label.appendChild(rightIcon);
+
+      } else if (stageClear[i]) {
+        // クリア済み
+        btn.classList.add("locked"); // 押せない
+        // 透明度は下げない（デフォルト1）
+        const leftIcon = document.createElement("img");
+        leftIcon.className = "inline-icon";
+        leftIcon.src = "pictures/clear.png";
+        label.appendChild(leftIcon);
+
+        label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : `ステージ${i}`));
+
+        const rightIcon = document.createElement("img");
+        rightIcon.className = "inline-icon";
+        rightIcon.src = "pictures/clear.png";
+        label.appendChild(rightIcon);
+
+      } else {
+        // 解放済み（未クリア）
+        label.appendChild(document.createTextNode(i === 0 ? "チュートリアル" : `ステージ${i}`));
       }
 
       btn.appendChild(label);
 
       btn.addEventListener("click", () => {
         if (btn.classList.contains("locked")) return;
-        const stageId = i;
-        location.href = `game.html?id=${stageId}`;
+        location.href = `game.html?id=${i}`;
       });
 
       container.appendChild(btn);
