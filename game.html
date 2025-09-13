@@ -100,8 +100,11 @@
             padding: 0 5px;
             margin-bottom: 10px;
             justify-content: center;
+            flex-wrap: nowrap;
             width: 100%;
+            box-sizing: border-box;
         }
+
 
         .card {
             aspect-ratio: 766/575;
@@ -266,10 +269,16 @@
         function resizeCards() {
             const rect = bgImg.getBoundingClientRect();
             const cardWidth = rect.width * 0.28;
+            const cardsContainer = document.getElementById('cards-container');
+
             document.querySelectorAll('.card').forEach(card => {
                 card.style.width = cardWidth + 'px';
                 card.style.flex = `0 0 ${cardWidth}px`;
             });
+
+            // カード数が少ない場合も中央に寄せる
+            const totalWidth = cardWidth * cardsContainer.children.length + 5 * (cardsContainer.children.length - 1);
+            cardsContainer.style.justifyContent = (totalWidth < rect.width) ? 'center' : 'flex-start';
         }
 
         window.addEventListener('resize', () => {
