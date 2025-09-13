@@ -6,6 +6,13 @@
     <title>ピタロジ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        @font-face {
+            font-family: 'DotGothic16';
+            src: url('fonts/DotGothic16-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         html,
         body {
             margin: 0;
@@ -51,14 +58,10 @@
         .button {
             width: 40px;
             height: 40px;
-            background-color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: url("pictures/backBtn.png") no-repeat center center;
+            background-size: contain;
             cursor: pointer;
             user-select: none;
-            font-weight: bold;
-            font-size: 24px;
             border-radius: 8px;
         }
 
@@ -73,6 +76,7 @@
         .cell,
         .cell-number {
             display: flex;
+            font-family: 'DotGothic16', sans-serif;
             justify-content: center;
             align-items: center;
             font-weight: bold;
@@ -96,7 +100,6 @@
             gap: 5px;
             padding: 0 5px;
             margin-bottom: 10px;
-            justify-content: center;
             width: 100%;
         }
 
@@ -120,10 +123,11 @@
         }
 
         .card-label {
+            font-family: 'DotGothic16', sans-serif;
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -55%);
             font-weight: bold;
             font-size: 20px;
             color: black;
@@ -158,15 +162,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
+            color: black;
             font-weight: bold;
             font-size: 16px;
         }
 
         #reset-button .reset-label {
-            position: static;
-            transform: none;
-            text-shadow: 2px 2px 3px black;
+            font-family: 'DotGothic16', sans-serif;
+            position: relative;
+            top: -3px;
         }
 
         #clear-overlay {
@@ -197,7 +201,6 @@
             cursor: pointer;
         }
 
-        /* PCのみスクロールバー表示 */
         @media (pointer: fine) {
             #cards-container-wrapper {
                 overflow-x: auto;
@@ -214,10 +217,9 @@
 
 <body>
     <img id="bg-img" src="bg/bg_play.png" alt="">
-
     <div class="app-wrapper">
         <div id="top-bar">
-            <div id="back-button" class="button">←</div>
+            <div id="back-button" class="button"></div>
         </div>
 
         <div id="board-container"></div>
@@ -263,10 +265,24 @@
         function resizeCards() {
             const rect = bgImg.getBoundingClientRect();
             const cardWidth = rect.width * 0.28;
-            document.querySelectorAll('.card').forEach(card => {
+            const cardsContainer = document.getElementById('cards-container');
+            const wrapper = document.getElementById('cards-container-wrapper');
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
                 card.style.width = cardWidth + 'px';
                 card.style.flex = `0 0 ${cardWidth}px`;
             });
+
+            if (cards.length <= 3) {
+                // 3枚以下なら中央寄せ
+                wrapper.style.justifyContent = 'center';
+                wrapper.style.padding = '0';
+            } else {
+                // 4枚以上なら左寄せにしてスクロール可能
+                wrapper.style.justifyContent = 'flex-start';
+                wrapper.style.padding = '0 5px';
+            }
         }
 
         window.addEventListener('resize', () => {
@@ -311,8 +327,12 @@
                         else if (c === -1) { div.className = 'cell-number'; div.dataset.row = r; div.textContent = r + 1; }
                         else {
                             div.className = 'cell';
-                            div.style.backgroundColor = stage.goal[r][c] ? '#00ffff' : '#fff';
+                            const isGoal = stage.goal[r][c];
+                            div.style.backgroundColor = isGoal ? '#A4A8D4' : '#fff';
                             div.textContent = board[r][c];
+
+                            //セルの文字色
+                            div.style.color = board[r][c] !== stage.goal[r][c] ? '#e94709' : 'black';
                         }
                         boardContainer.appendChild(div);
                     }
@@ -401,7 +421,6 @@
             }
 
             function showClearOverlay() {
-                // クリア状況を保存 
                 let totalStages = 14;
                 let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
                 stageClear[stageId] = true;
