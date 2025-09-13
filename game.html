@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Logic Puzzle Game</title>
+    <title>ピタロジ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* ---- 全体 ---- */
@@ -240,6 +240,10 @@
 
     <script src="stages_contents.js"></script>
     <script>
+        if (document.referrer.includes('start.html')) {
+            localStorage.removeItem('stageClear');
+        }
+
         const bgImg = document.getElementById('bg-img');
         const appWrapper = document.querySelector('.app-wrapper');
 
