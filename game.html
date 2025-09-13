@@ -37,11 +37,10 @@
             align-items: center;
             justify-content: flex-start;
             padding-top: 10px;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
             box-sizing: border-box;
         }
 
-        /* 上部バー */
         #top-bar {
             width: 100%;
             display: flex;
@@ -51,8 +50,8 @@
         }
 
         .button {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background-color: #fff;
             display: flex;
             justify-content: center;
@@ -64,10 +63,9 @@
             border-radius: 8px;
         }
 
-        /* 盤面 */
         #board-container {
             display: grid;
-            margin: 20px 0 60px 0;
+            margin: 10px 0 30px 0;
             grid-gap: 1px;
             justify-content: center;
             box-sizing: border-box;
@@ -89,30 +87,23 @@
             background-color: #aaa;
         }
 
-        /* カード列 */
+        #cards-container-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
         #cards-container {
             display: flex;
             gap: 5px;
-            overflow-x: auto;
             padding: 0 5px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            justify-content: center;
             width: 100%;
-            box-sizing: border-box;
-
-            /* スクロールバー非表示 */
-            -ms-overflow-style: none;
-            /* IE & Edge */
-            scrollbar-width: none;
-            /* Firefox */
         }
 
-        #cards-container::-webkit-scrollbar {
-            display: none;
-            /* Chrome, Safari, Edge */
-        }
 
         .card {
-            aspect-ratio: 766 / 575;
+            aspect-ratio: 766/575;
             border-radius: 12px;
             overflow: hidden;
             position: relative;
@@ -149,38 +140,38 @@
             transform: scale(1.05);
         }
 
-        /* リセットボタン */
         #reset-wrapper {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             justify-content: center;
-            margin: 20px 0;
-            width: 40%;
+            width: 200px;
         }
 
+
         #reset-button {
-            position: relative;
             width: 100%;
-            aspect-ratio: 300 / 100;
+            height: 60px;
             border: none;
             background: url("pictures/re_Btn.png") no-repeat center center;
             background-size: contain;
             cursor: pointer;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
         }
 
         #reset-button .reset-label {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-            font-size: 12.5px;
-            color: white;
+            position: static;
+            transform: none;
             text-shadow: 2px 2px 3px black;
-            pointer-events: none;
         }
 
-        /* ステージクリア */
         #clear-overlay {
             position: fixed;
             top: 50%;
@@ -208,6 +199,19 @@
             font-size: 18px;
             cursor: pointer;
         }
+
+        /* PCのみスクロールバー表示 */
+        @media (pointer: fine) {
+            #cards-container-wrapper {
+                overflow-x: auto;
+            }
+        }
+
+        @media (pointer: coarse) {
+            #cards-container-wrapper {
+                overflow-x: hidden;
+            }
+        }
     </style>
 </head>
 
@@ -220,12 +224,13 @@
         </div>
 
         <div id="board-container"></div>
-        <div id="cards-container"></div>
+
+        <div id="cards-container-wrapper">
+            <div id="cards-container"></div>
+        </div>
 
         <div id="reset-wrapper">
-            <button id="reset-button">
-                <span class="reset-label">リセット</span>
-            </button>
+            <button id="reset-button"><span class="reset-label">リセット</span></button>
         </div>
     </div>
 
@@ -236,7 +241,6 @@
     </div>
 
     <script src="stages_contents.js"></script>
-
     <script>
         const bgImg = document.getElementById('bg-img');
         const appWrapper = document.querySelector('.app-wrapper');
@@ -257,10 +261,10 @@
 
         function resizeCards() {
             const rect = bgImg.getBoundingClientRect();
-            const cardWidth = rect.width * 0.28; // 背景幅の28%
+            const cardWidth = rect.width * 0.28;
             document.querySelectorAll('.card').forEach(card => {
                 card.style.width = cardWidth + 'px';
-                card.style.flex = `0 0 ${cardWidth}px`; // 幅固定
+                card.style.flex = `0 0 ${cardWidth}px`;
             });
         }
 
@@ -346,7 +350,7 @@
                     div.addEventListener('click', () => { selectedCard = idx; renderCards(); });
                     cardsContainer.appendChild(div);
                 });
-                resizeCards(); // サイズ更新
+                resizeCards();
             }
 
             function addRowColListeners() {
