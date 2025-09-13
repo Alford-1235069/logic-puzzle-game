@@ -20,10 +20,8 @@
       overflow: hidden;
       font-family: 'DotGothic16', sans-serif;
       background-color: black;
-      /* 余白色 */
     }
 
-    /* 背景画像（固定） */
     #bg-img {
       position: fixed;
       top: 0;
@@ -35,7 +33,6 @@
       z-index: 0;
     }
 
-    /* アプリ全体 */
     .app-wrapper {
       position: absolute;
       top: 0;
@@ -47,7 +44,6 @@
       flex-direction: column;
       align-items: center;
       overflow-y: auto;
-      /* スクロール可能 */
       box-sizing: border-box;
       padding-top: 100px;
       z-index: 1;
@@ -95,7 +91,6 @@
 
     .stage-btn.clear {
       pointer-events: none;
-      /* クリア済みは押せない */
     }
 
     .label {
@@ -112,6 +107,7 @@
       align-items: center;
       gap: 6px;
       white-space: nowrap;
+      color: #fff;
     }
 
     .inline-icon {
@@ -123,7 +119,6 @@
 </head>
 
 <body>
-  <!-- 背景画像 -->
   <img id="bg-img" src="bg/bg01.png" alt="背景">
 
   <div class="app-wrapper">
@@ -134,24 +129,22 @@
     const totalStages = 14;
     const container = document.getElementById("stage-container");
 
-    // localStorage からクリア状況取得、未保存なら全 false
     let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
 
-    // 初期状態：チュートリアルのみ解放
+    // 初期状態
     if (!stageClear.some(c => c === true)) {
-      stageClear[0] = false; // チュートリアル未クリア状態
+      stageClear[0] = false;
     }
 
     function updateBackground() {
       const lastClearedIndex = stageClear.lastIndexOf(true);
-      let bgNumber = lastClearedIndex + 2; // 最初は bg01.png
+      let bgNumber = lastClearedIndex + 2; 
       if (bgNumber > totalStages) bgNumber = totalStages;
       document.getElementById('bg-img').src = `bg/bg${String(bgNumber).padStart(2, '0')}.png`;
     }
 
     updateBackground();
 
-    // ステージステータス設定
     let stageStatus = [true, ...Array(totalStages - 1).fill(false)];
     stageClear.forEach((cleared, i) => {
       if (cleared && i + 1 < totalStages) stageStatus[i + 1] = true; // 次のステージ解放
@@ -163,7 +156,7 @@
       btn.className = "stage-btn";
 
       const img = document.createElement("img");
-      img.src = "pictures/stageBtn.png"; // ボタン背景は固定
+      img.src = "pictures/stageBtn.png";
       img.className = "button-img";
       btn.appendChild(img);
 
@@ -201,7 +194,6 @@
 
       btn.appendChild(label);
 
-      // 解放済み未クリアのみクリック可能
       btn.addEventListener("click", () => {
         if (btn.classList.contains("locked") || btn.classList.contains("clear")) return;
         location.href = `game.html?id=${i}`;
