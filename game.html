@@ -6,7 +6,6 @@
     <title>Logic Puzzle Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* ---- 全体 ---- */
         html,
         body {
             margin: 0;
@@ -90,6 +89,7 @@
         #cards-container-wrapper {
             width: 100%;
             overflow-x: auto;
+            /* 横スクロール必ず出す */
         }
 
         #cards-container {
@@ -97,10 +97,11 @@
             gap: 5px;
             padding: 0 5px;
             margin-bottom: 10px;
-            justify-content: center;
-            width: 100%;
+            justify-content: flex-start;
+            /* スマホでも左から並べる */
+            width: max-content;
+            /* 横幅自動 */
         }
-
 
         .card {
             aspect-ratio: 766/575;
@@ -149,7 +150,6 @@
             justify-content: center;
             width: 200px;
         }
-
 
         #reset-button {
             width: 100%;
@@ -200,16 +200,27 @@
             cursor: pointer;
         }
 
-        /* PCのみスクロールバー表示 */
-        @media (pointer: fine) {
-            #cards-container-wrapper {
-                overflow-x: auto;
-            }
-        }
+        /* ----- メディアクエリ：スマホ対応 ----- */
+        @media (max-width: 600px) {
 
-        @media (pointer: coarse) {
-            #cards-container-wrapper {
-                overflow-x: hidden;
+            .cell,
+            .cell-number {
+                font-size: 18px;
+            }
+
+            #cards-container {
+                gap: 3px;
+            }
+
+            .card {
+                width: 80px;
+                flex: 0 0 80px;
+            }
+
+            #reset-button {
+                width: 150px;
+                height: 50px;
+                font-size: 14px;
             }
         }
     </style>
@@ -217,18 +228,14 @@
 
 <body>
     <img id="bg-img" src="bg/bg_play.png" alt="">
-
     <div class="app-wrapper">
         <div id="top-bar">
             <div id="back-button" class="button">←</div>
         </div>
-
         <div id="board-container"></div>
-
         <div id="cards-container-wrapper">
             <div id="cards-container"></div>
         </div>
-
         <div id="reset-wrapper">
             <button id="reset-button"><span class="reset-label">リセット</span></button>
         </div>
@@ -242,6 +249,7 @@
 
     <script src="stages_contents.js"></script>
     <script>
+        // PC/スマホ両対応でカードサイズ自動調整
         const bgImg = document.getElementById('bg-img');
         const appWrapper = document.querySelector('.app-wrapper');
 
@@ -261,7 +269,8 @@
 
         function resizeCards() {
             const rect = bgImg.getBoundingClientRect();
-            const cardWidth = rect.width * 0.28;
+            let cardWidth = rect.width * 0.28;
+            if (window.innerWidth <= 600) cardWidth = 80; // スマホ固定幅
             document.querySelectorAll('.card').forEach(card => {
                 card.style.width = cardWidth + 'px';
                 card.style.flex = `0 0 ${cardWidth}px`;
