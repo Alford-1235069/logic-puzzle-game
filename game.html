@@ -416,6 +416,7 @@
 
             function renderCards() {
                 const cardsContainer = document.getElementById('cards-container');
+                const wrapper = document.getElementById('cards-container-wrapper'); // ← 追加！
                 cardsContainer.innerHTML = '';
 
                 // 盤面サイズに応じた文字サイズ
@@ -431,7 +432,10 @@
                     div.className = 'card';
                     div.dataset.index = idx;
                     if (selectedCard === idx) div.classList.add('selected');
-                    if (usedCards.has(idx)) { div.style.opacity = 0.5; div.style.pointerEvents = 'none'; }
+                    if (usedCards.has(idx)) {
+                        div.style.opacity = 0.5;
+                        div.style.pointerEvents = 'none';
+                    }
 
                     let imgSrc = '';
                     if (card.type === 'NOT') imgSrc = 'pictures/not_Btn.png';
@@ -448,13 +452,19 @@
                     label.className = 'card-label';
                     label.style.fontSize = labelFontSize + 'px';
                     label.textContent = (card.type !== 'NOT' && card.sequence)
-                        ? `${card.type}\n${card.sequence.join('')}` : card.type;
+                        ? `${card.type}\n${card.sequence.join('')}`
+                        : card.type;
                     div.appendChild(label);
 
-                    div.addEventListener('click', () => { selectedCard = idx; renderCards(); });
+                    div.addEventListener('click', () => {
+                        selectedCard = idx;
+                        renderCards();
+                    });
                     cardsContainer.appendChild(div);
                 });
+
                 resizeCards();
+
                 if (window.innerWidth <= 768) {
                     if (stage.cards.length === 3) {
                         cardsContainer.style.justifyContent = 'center';
@@ -465,6 +475,7 @@
                     }
                 }
             }
+
 
             function addRowColListeners() {
                 document.querySelectorAll('.cell-number').forEach(cell => {
