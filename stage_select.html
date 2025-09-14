@@ -126,7 +126,7 @@
   </div>
 
   <script>
-    const totalStages = 14;
+    const totalStages = 13;
     const container = document.getElementById("stage-container");
 
     let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
@@ -138,7 +138,7 @@
 
     function updateBackground() {
       const lastClearedIndex = stageClear.lastIndexOf(true);
-      let bgNumber = lastClearedIndex + 2; 
+      let bgNumber = lastClearedIndex + 2;
       if (bgNumber > totalStages) bgNumber = totalStages;
       document.getElementById('bg-img').src = `bg/bg${String(bgNumber).padStart(2, '0')}.png`;
     }
@@ -204,4 +204,4 @@
   </script>
 </body>
 
-</html>
+</html>ステージ３をクリアした後に音楽を流れるようにしたい！

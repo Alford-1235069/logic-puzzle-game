@@ -525,39 +525,30 @@
             }
 
             function showRewardImage(callback) {
-                const rewardImg = document.createElement('img');
-                rewardImg.src = stage.reward;
-                rewardImg.id = 'reward-image';
-                rewardImg.style.position = 'absolute';
-                rewardImg.style.top = '50%';
-                rewardImg.style.left = '50%';
-                rewardImg.style.transform = 'translate(-50%, -50%)';
-                rewardImg.style.maxWidth = '80%';
-                rewardImg.style.maxHeight = '80%';
-                rewardImg.style.opacity = 0;
-                rewardImg.style.transition = 'opacity 1s';
-                document.body.appendChild(rewardImg);
+                const rect = boardContainer.getBoundingClientRect();
+                const cellSize = boardContainer.querySelector('.cell')?.getBoundingClientRect().width || 0;
 
-                const resetBtn = document.getElementById('reset-btn');
-                if (resetBtn) resetBtn.disabled = true;
+                const boardWidth = rect.width - cellSize;
+                const boardHeight = rect.height - cellSize;
+                const boardLeft = rect.left + cellSize;
+                const boardTop = rect.top + cellSize;
 
-                setTimeout(() => {
-                    rewardImg.style.opacity = 1;
-                }, 200);
+                const rewardDiv = document.getElementById("reward-image");
+                rewardDiv.style.left = boardLeft + "px";
+                rewardDiv.style.top = boardTop + "px";
+                rewardDiv.style.width = boardWidth + "px";
+                rewardDiv.style.height = boardHeight + "px";
 
-                setTimeout(() => {
-                    rewardImg.style.transition = 'opacity 1s';
-                    rewardImg.style.opacity = 0;
-                    setTimeout(() => {
-                        document.body.removeChild(rewardImg);
+                rewardDiv.innerHTML = `<img src="${stage.clearImage}" alt="reward" style="width:100%;height:100%;object-fit:contain;">`;
+                rewardDiv.style.display = "block";
+                rewardDiv.style.opacity = 0;
 
-                        if (resetBtn) resetBtn.disabled = false;
+                requestAnimationFrame(() => {
+                    rewardDiv.style.opacity = 1;
+                });
 
-                        if (callback) callback();
-                    }, 1000);
-                }, 3000);
+                setTimeout(callback, 2000 + 1000);
             }
-
 
             function showClearOverlay() {
                 let totalStages = 14;

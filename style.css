@@ -5,7 +5,6 @@
   padding: 16px;
 }
 
-/* ボタンなどの調整（スマホ画面で幅が600px未満の場合） */
 @media (max-width: 600px) {
   .button {
     font-size: 14px;
