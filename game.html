@@ -127,7 +127,7 @@
             left: 50%;
             transform: translate(-50%, -55%);
             font-weight: bold;
-            font-size: 20px;
+            font-size: 14px;
             color: black;
             text-shadow: 1px 1px 2px white;
             text-align: center;
@@ -350,6 +350,15 @@
             function renderCards() {
                 const cardsContainer = document.getElementById('cards-container');
                 cardsContainer.innerHTML = '';
+
+                // 盤面サイズに応じた文字サイズ
+                let labelFontSize = 20; 
+                if (rows === 12 && cols === 12) {
+                    labelFontSize = 16;
+                } else if (rows === 16 && cols === 16) {
+                    labelFontSize = 13;
+                }
+
                 stage.cards.forEach((card, idx) => {
                     const div = document.createElement('div');
                     div.className = 'card';
@@ -370,6 +379,7 @@
 
                     const label = document.createElement('span');
                     label.className = 'card-label';
+                    label.style.fontSize = labelFontSize + 'px';
                     label.textContent = (card.type !== 'NOT' && card.sequence)
                         ? `${card.type}\n${card.sequence.join('')}` : card.type;
                     div.appendChild(label);
@@ -379,6 +389,7 @@
                 });
                 resizeCards();
             }
+
 
             function addRowColListeners() {
                 document.querySelectorAll('.cell-number').forEach(cell => {
@@ -446,13 +457,13 @@
                 rewardDiv.style.display = "block";
                 rewardDiv.style.opacity = 0;
 
-                // フェードイン
                 requestAnimationFrame(() => {
                     rewardDiv.style.opacity = 1;
                 });
 
-                setTimeout(callback, 2000);
+                setTimeout(callback, 2000 + 1000);
             }
+
 
             function showClearOverlay() {
                 let totalStages = 14;
@@ -480,7 +491,7 @@
                 if (stageId >= 12) setTimeout(() => {
                     rewardDiv.style.display = "none";
                     window.location.href = 'stage_select.html';
-                }, 4000);
+                }, 5000);
             }
 
             document.getElementById('back-button').addEventListener('click', () => {
