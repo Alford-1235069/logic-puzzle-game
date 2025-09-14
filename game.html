@@ -455,6 +455,15 @@
                     cardsContainer.appendChild(div);
                 });
                 resizeCards();
+                if (window.innerWidth <= 768) {
+                    if (stage.cards.length === 3) {
+                        cardsContainer.style.justifyContent = 'center';
+                        wrapper.style.overflowX = 'hidden';
+                    } else {
+                        cardsContainer.style.justifyContent = 'flex-start';
+                        wrapper.style.overflowX = 'auto';
+                    }
+                }
             }
 
             function addRowColListeners() {
