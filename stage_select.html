@@ -115,14 +115,43 @@
       height: auto;
       flex-shrink: 0;
     }
+
+    #all-clear-overlay {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 2px solid #000;
+      padding: 20px;
+      text-align: center;
+      z-index: 200;
+      max-width: 80%;
+      box-sizing: border-box;
+    }
+
+    #all-clear-overlay p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    #all-clear-overlay button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
   <img id="bg-img" src="bg/bg01.png" alt="背景">
-
   <div class="app-wrapper">
     <div id="stage-container"></div>
+  </div>
+  <div id="all-clear-overlay">
+    <p>すべてのステージクリアおめでとう！</p>
+    <button id="all-clear-ok">OK</button>
   </div>
 
   <script>
@@ -144,7 +173,6 @@
 
       document.getElementById('bg-img').src = `bg/bg${String(bgNumber).padStart(2, '0')}.png`;
     }
-
 
     updateBackground();
 
@@ -204,6 +232,16 @@
 
       container.appendChild(btn);
     }
+
+    //全ステージクリア時
+    if (stageClear.every(c => c)) {
+      const overlay = document.getElementById('all-clear-overlay');
+      overlay.style.display = 'block';
+      document.getElementById('all-clear-ok').onclick = () => {
+        overlay.style.display = 'none';
+      };
+    }
+
   </script>
 </body>
 

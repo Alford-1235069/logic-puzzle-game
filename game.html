@@ -551,11 +551,11 @@
             }
 
             function showClearOverlay() {
-                let totalStages = 14;
+                let totalStages = 13;
                 let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
 
-                stageClear[stageId] = true; // ここでクリア済みにする
-                localStorage.setItem('stageClear', JSON.stringify(stageClear)); // 先に保存する
+                stageClear[stageId] = true; 
+                localStorage.setItem('stageClear', JSON.stringify(stageClear)); 
 
                 document.getElementById('back-button').style.pointerEvents = 'none';
                 const overlay = document.getElementById('clear-overlay');
