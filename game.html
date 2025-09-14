@@ -221,6 +221,67 @@
                 overflow-x: hidden;
             }
         }
+
+        /* -------------------------
+           スマホ用レイアウト追加
+        ------------------------- */
+        @media screen and (max-width: 768px) {
+            #bg-img {
+                width: 100vw;
+                height: auto;
+            }
+
+            #board-container {
+                margin: 5px 0 120px 0;
+            }
+
+            .cell,
+            .cell-number {
+                font-size: 16px;
+            }
+
+            #cards-container-wrapper {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100vw;
+                background: rgba(0, 0, 0, 0.8);
+                padding: 8px 0;
+                overflow-x: auto;
+                z-index: 100;
+            }
+
+            #cards-container {
+                justify-content: flex-start !important;
+            }
+
+            .card {
+                width: 28vw !important;
+                flex: 0 0 28vw !important;
+            }
+
+            .card-label {
+                font-size: 12px;
+            }
+
+            #reset-wrapper {
+                position: fixed;
+                bottom: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 150px;
+            }
+
+            #reset-button {
+                height: 45px;
+            }
+
+            #clear-overlay {
+                font-size: 18px;
+                padding: 10px;
+                width: 95%;
+            }
+        }
     </style>
 </head>
 
@@ -318,10 +379,16 @@
                 const rect = bgImg.getBoundingClientRect();
                 const availableWidth = rect.width;
                 const availableHeight = rect.height;
-                const cellSize = Math.max(24, Math.floor(Math.min(
-                    (availableWidth * 0.9) / (cols + 1),
-                    (availableHeight * 0.6) / (rows + 1)
-                )));
+                const isMobile = window.innerWidth <= 768;
+
+                const cellSize = Math.max(
+                    24,
+                    Math.floor(Math.min(
+                        (availableWidth * 0.95) / (cols + 1),
+                        (availableHeight * (isMobile ? 0.75 : 0.6)) / (rows + 1)
+                    ))
+                );
+
                 boardContainer.style.gridTemplateColumns = `repeat(${cols + 1}, ${cellSize}px)`;
                 boardContainer.style.gridAutoRows = `${cellSize}px`;
             }
@@ -353,7 +420,7 @@
                 cardsContainer.innerHTML = '';
 
                 // 盤面サイズに応じた文字サイズ
-                let labelFontSize = 20; 
+                let labelFontSize = 20;
                 if (rows === 12 && cols === 12) {
                     labelFontSize = 16;
                 } else if (rows === 16 && cols === 16) {
@@ -390,7 +457,6 @@
                 });
                 resizeCards();
             }
-
 
             function addRowColListeners() {
                 document.querySelectorAll('.cell-number').forEach(cell => {
@@ -464,7 +530,6 @@
 
                 setTimeout(callback, 2000 + 1000);
             }
-
 
             function showClearOverlay() {
                 let totalStages = 14;
