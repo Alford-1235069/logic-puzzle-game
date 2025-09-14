@@ -199,6 +199,16 @@
             cursor: pointer;
         }
 
+        /* ご褒美絵 */
+        #reward-image {
+            position: absolute;
+            display: none;
+            pointer-events: none;
+            z-index: 150;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
         @media (pointer: fine) {
             #cards-container-wrapper {
                 overflow-x: auto;
@@ -230,6 +240,9 @@
             <button id="reset-button"><span class="reset-label">リセット</span></button>
         </div>
     </div>
+
+    <!-- ご褒美絵 -->
+    <div id="reward-image"></div>
 
     <div id="clear-overlay">
         <p>ステージクリア！</p>
@@ -273,16 +286,13 @@
             });
 
             if (cards.length === 3) {
-                // 3枚のときは中央寄せ
                 cardsContainer.style.justifyContent = 'center';
                 wrapper.style.overflowX = 'hidden';
             } else {
-                // 4枚以上は左寄せでスクロール
                 cardsContainer.style.justifyContent = 'flex-start';
                 wrapper.style.overflowX = 'auto';
             }
         }
-
 
         window.addEventListener('resize', () => {
             clearTimeout(window._bgPosTimer);
@@ -329,8 +339,6 @@
                             const isGoal = stage.goal[r][c];
                             div.style.backgroundColor = isGoal ? '#A4A8D4' : '#fff';
                             div.textContent = board[r][c];
-
-                            //セルの文字色
                             div.style.color = board[r][c] !== stage.goal[r][c] ? '#e94709' : 'black';
                         }
                         boardContainer.appendChild(div);
@@ -416,7 +424,34 @@
             function checkClear() {
                 let cleared = true;
                 for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (board[r][c] !== stage.goal[r][c]) cleared = false;
-                if (cleared) showClearOverlay();
+                if (cleared) showRewardImage(() => showClearOverlay());
+            }
+
+            function showRewardImage(callback) {
+                const rect = boardContainer.getBoundingClientRect();
+                const cellSize = boardContainer.querySelector('.cell')?.getBoundingClientRect().width || 0;
+
+                const boardWidth = rect.width - cellSize;
+                const boardHeight = rect.height - cellSize;
+                const boardLeft = rect.left + cellSize;
+                const boardTop = rect.top + cellSize;
+
+                const rewardDiv = document.getElementById("reward-image");
+                rewardDiv.style.left = boardLeft + "px";
+                rewardDiv.style.top = boardTop + "px";
+                rewardDiv.style.width = boardWidth + "px";
+                rewardDiv.style.height = boardHeight + "px";
+
+                rewardDiv.innerHTML = `<img src="${stage.clearImage}" alt="reward" style="width:100%;height:100%;object-fit:contain;">`;
+                rewardDiv.style.display = "block";
+                rewardDiv.style.opacity = 0;
+
+                // フェードイン
+                requestAnimationFrame(() => {
+                    rewardDiv.style.opacity = 1;
+                });
+
+                setTimeout(callback, 2000);
             }
 
             function showClearOverlay() {
@@ -428,10 +463,24 @@
                 document.getElementById('back-button').style.pointerEvents = 'none';
                 const overlay = document.getElementById('clear-overlay');
                 overlay.style.display = 'block';
+
+                const rewardDiv = document.getElementById("reward-image");
+
                 document.getElementById('next-stage').style.display = (stageId >= 12) ? 'none' : 'inline-block';
-                document.getElementById('next-stage').onclick = () => window.location.href = `game.html?id=${stageId + 1}`;
-                document.getElementById('to-select').onclick = () => window.location.href = 'stage_select.html';
-                if (stageId >= 12) setTimeout(() => window.location.href = 'stage_select.html', 2000);
+                document.getElementById('next-stage').onclick = () => {
+                    rewardDiv.style.display = "none";
+                    window.location.href = `game.html?id=${stageId + 1}`;
+                };
+
+                document.getElementById('to-select').onclick = () => {
+                    rewardDiv.style.display = "none";
+                    window.location.href = 'stage_select.html';
+                };
+
+                if (stageId >= 12) setTimeout(() => {
+                    rewardDiv.style.display = "none";
+                    window.location.href = 'stage_select.html';
+                }, 4000);
             }
 
             document.getElementById('back-button').addEventListener('click', () => {

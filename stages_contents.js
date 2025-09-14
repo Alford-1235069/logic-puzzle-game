@@ -29,7 +29,8 @@ const stages = [
             { type: "NOT" },
             { type: "OR", sequence: [1, 0, 1, 1, 0, 0, 0, 1] },
             { type: "AND", sequence: [1, 0, 0, 1, 1, 1, 1, 0] }
-        ]
+        ],
+        clearImage: "pictures/onigiri.png"
     },
 
     // id:1
@@ -61,7 +62,8 @@ const stages = [
             { type: "OR", sequence: [0, 1, 0, 1, 1, 0, 1, 0] },
             { type: "OR", sequence: [0, 1, 0, 1, 1, 1, 1, 0] },
             { type: "AND", sequence: [0, 1, 1, 0, 0, 1, 1, 1] }
-        ]
+        ],
+        clearImage: "pictures/mushroom.png"
     },
 
     // id:2
@@ -93,7 +95,8 @@ const stages = [
             { type: "OR", sequence: [0, 1, 0, 0, 0, 0, 1, 1] },
             { type: "OR", sequence: [0, 0, 1, 1, 1, 1, 1, 0] },
             { type: "AND", sequence: [1, 1, 0, 0, 0, 0, 1, 0] }
-        ]
+        ],
+        clearImage: "pictures/bird.png"
     }
     ,
     {
@@ -124,7 +127,8 @@ const stages = [
             { type: "OR", sequence: [0, 0, 1, 0, 1, 1, 1, 1] },
             { type: "AND", sequence: [1, 0, 1, 1, 0, 0, 1, 1] },
             { type: "AND", sequence: [1, 0, 1, 0, 1, 1, 0, 0] }
-        ]
+        ],
+        clearImage: "pictures/music.png"
     },
 
     // --- 9x9 ---
@@ -159,7 +163,8 @@ const stages = [
             { type: "OR", sequence: [1, 1, 1, 1, 1, 1, 1, 1, 1] },
             { type: "AND", sequence: [1, 0, 0, 0, 1, 0, 0, 0, 0] },
             { type: "AND", sequence: [0, 0, 1, 0, 0, 0, 1, 0, 0] }
-        ]
+        ],
+        clearImage: "pictures/heart.png"
     },
     {
         id: 5,
@@ -192,7 +197,8 @@ const stages = [
             { type: "OR", sequence: [1, 1, 0, 0, 1, 1, 0, 0, 0] },
             { type: "AND", sequence: [0, 1, 0, 0, 0, 0, 0, 1, 1] },
             { type: "AND", sequence: [1, 1, 0, 0, 1, 1, 0, 0, 1] }
-        ]
+        ],
+        clearImage: "pictures/sun.png"
     },
     {
         id: 6,
@@ -224,7 +230,8 @@ const stages = [
             { type: "AND", sequence: [1, 0, 0, 1, 0, 0, 1, 1, 0] },
             { type: "AND", sequence: [0, 0, 0, 1, 1, 1, 0, 0, 0] },
             { type: "XOR", sequence: [1, 1, 0, 0, 1, 1, 0, 0, 1] }
-        ]
+        ],
+        clearImage: "pictures/shield.png"
     },
     {
         id: 7,
@@ -258,7 +265,8 @@ const stages = [
             { type: "AND", sequence: [1, 0, 0, 1, 1, 0, 0, 0, 0] },
             { type: "AND", sequence: [0, 0, 1, 0, 0, 0, 1, 1, 1] },
             { type: "XOR", sequence: [1, 1, 1, 1, 0, 1, 1, 0, 0] }
-        ]
+        ],
+        clearImage: "pictures/sword.png"
     },
 
     // --- 12x12 ---
@@ -299,7 +307,8 @@ const stages = [
             { type: "AND", sequence: [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1] },
             { type: "XOR", sequence: [1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1] },
             { type: "XOR", sequence: [1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1] }
-        ]
+        ],
+        clearImage: "pictures/flower.png"
     },
     {
         id: 9,
@@ -338,7 +347,8 @@ const stages = [
             { type: "AND", sequence: [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0] },
             { type: "AND", sequence: [1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0] },
             { type: "AND", sequence: [1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] }
-        ]
+        ],
+        clearImage: "pictures/tree.png"
     },
     {
         id: 10,
@@ -377,7 +387,8 @@ const stages = [
             { type: "AND", sequence: [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0] },
             { type: "AND", sequence: [1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0] },
             { type: "AND", sequence: [1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] }
-        ]
+        ],
+        clearImage: "pictures/rock.png"
     },
     {
         id: 11,
@@ -412,7 +423,8 @@ const stages = [
         ],
         cards: [
 
-        ]
+        ],
+        clearImage: "pictures/home.png"
     },
     // --- 16x16 ---
     {
@@ -456,6 +468,7 @@ const stages = [
         ],
         cards: [
             // ← ここに追加
-        ]
+        ],
+        clearImage: "pictures/hero.png"
     }
 ];
