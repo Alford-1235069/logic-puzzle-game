@@ -62,7 +62,6 @@
             background-size: contain;
             cursor: pointer;
             user-select: none;
-            border-radius: 8px;
         }
 
         #board-container {
@@ -100,7 +99,6 @@
             gap: 5px;
             padding: 0 5px;
             margin-bottom: 10px;
-            width: 100%;
         }
 
         .card {
@@ -162,7 +160,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: black;
+            color: #fff;
             font-weight: bold;
             font-size: 16px;
         }
@@ -274,16 +272,17 @@
                 card.style.flex = `0 0 ${cardWidth}px`;
             });
 
-            if (cards.length <= 3) {
-                // 3枚以下なら中央寄せ
-                wrapper.style.justifyContent = 'center';
-                wrapper.style.padding = '0';
+            if (cards.length === 3) {
+                // 3枚のときは中央寄せ
+                cardsContainer.style.justifyContent = 'center';
+                wrapper.style.overflowX = 'hidden';
             } else {
-                // 4枚以上なら左寄せにしてスクロール可能
-                wrapper.style.justifyContent = 'flex-start';
-                wrapper.style.padding = '0 5px';
+                // 4枚以上は左寄せでスクロール
+                cardsContainer.style.justifyContent = 'flex-start';
+                wrapper.style.overflowX = 'auto';
             }
         }
+
 
         window.addEventListener('resize', () => {
             clearTimeout(window._bgPosTimer);
