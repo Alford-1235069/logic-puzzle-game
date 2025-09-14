@@ -139,9 +139,12 @@
     function updateBackground() {
       const lastClearedIndex = stageClear.lastIndexOf(true);
       let bgNumber = lastClearedIndex + 2;
-      if (bgNumber > totalStages) bgNumber = totalStages;
+
+      if (bgNumber > totalStages) bgNumber = totalStages + 1;
+
       document.getElementById('bg-img').src = `bg/bg${String(bgNumber).padStart(2, '0')}.png`;
     }
+
 
     updateBackground();
 
@@ -204,4 +207,4 @@
   </script>
 </body>
 
-</html>ステージ３をクリアした後に音楽を流れるようにしたい！
+</html>
