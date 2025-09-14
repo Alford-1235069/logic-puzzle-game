@@ -378,19 +378,20 @@
             function resizeBoard() {
                 const rect = bgImg.getBoundingClientRect();
                 const availableWidth = rect.width;
-                const availableHeight = rect.height;
+                let availableHeight = rect.height;
                 const isMobile = window.innerWidth <= 768;
 
                 let heightFactor = isMobile ? 0.75 : 0.6;
 
                 if (isMobile && rows === 16 && cols === 16 && stageId >= 12) {
-                    heightFactor = 0.6; 
+                    heightFactor = 0.55;
+
+                    availableHeight -= 150;
                 }
 
                 const cellSize = Math.max(
-                    24,
                     Math.floor(Math.min(
-                        (availableWidth * 0.95) / (cols + 1),
+                        (availableWidth * 0.9) / (cols + 1),
                         (availableHeight * heightFactor) / (rows + 1)
                     ))
                 );
@@ -398,6 +399,7 @@
                 boardContainer.style.gridTemplateColumns = `repeat(${cols + 1}, ${cellSize}px)`;
                 boardContainer.style.gridAutoRows = `${cellSize}px`;
             }
+
 
 
             function renderBoard() {
