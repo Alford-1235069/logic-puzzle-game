@@ -381,17 +381,24 @@
                 const availableHeight = rect.height;
                 const isMobile = window.innerWidth <= 768;
 
+                let heightFactor = isMobile ? 0.75 : 0.6;
+
+                if (isMobile && rows === 16 && cols === 16 && stageId >= 12) {
+                    heightFactor = 0.6; 
+                }
+
                 const cellSize = Math.max(
                     24,
                     Math.floor(Math.min(
                         (availableWidth * 0.95) / (cols + 1),
-                        (availableHeight * (isMobile ? 0.75 : 0.6)) / (rows + 1)
+                        (availableHeight * heightFactor) / (rows + 1)
                     ))
                 );
 
                 boardContainer.style.gridTemplateColumns = `repeat(${cols + 1}, ${cellSize}px)`;
                 boardContainer.style.gridAutoRows = `${cellSize}px`;
             }
+
 
             function renderBoard() {
                 resizeBoard();
@@ -555,8 +562,8 @@
                 let totalStages = 13;
                 let stageClear = JSON.parse(localStorage.getItem('stageClear')) || Array(totalStages).fill(false);
 
-                stageClear[stageId] = true; 
-                localStorage.setItem('stageClear', JSON.stringify(stageClear)); 
+                stageClear[stageId] = true;
+                localStorage.setItem('stageClear', JSON.stringify(stageClear));
 
                 document.getElementById('back-button').style.pointerEvents = 'none';
                 const overlay = document.getElementById('clear-overlay');
